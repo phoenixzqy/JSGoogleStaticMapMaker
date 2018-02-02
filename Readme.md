@@ -1,0 +1,1 @@
+## Pure JS Google Static Map Maker
