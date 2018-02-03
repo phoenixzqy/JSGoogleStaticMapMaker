@@ -1,33 +1,35 @@
 /**
  * Created by qiyuzhao on 2018-02-02.
  */
+const path = require('path');
 
-module.exports = {
+const config = {
   entry: './index.js',
   output: {
-    path: './dist',
+    path: path.resolve(__dirname, 'dist'),
     filename: 'JSGoogleStaticMapMaker.js'
   },
   module: {
-    // define loaders
-    // define loaders
-    loaders: [
+    rules: [
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        query: {
-          presets: [
-            ['env',
-              {
-                targets: {
-                  "browsers": ["last 2 versions", "ie >= 9"]
-                },
-                "plugins": ["transform-flow-strip-types"]
-              }]
-          ]
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['babel-preset-env'],
+            plugins: [require('babel-plugin-transform-flow-strip-types')]
+          }
         }
       }
     ]
+  },
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, 'src/')
+    }
   }
 };
+
+
+module.exports = config;
