@@ -1,0 +1,30 @@
+{
+  "name": "jsgooglestaticmapmaker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "babel-preset-env": "^1.6.1",
+    "validatorjs": "^3.14.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phoenixzqy/JSGoogleStaticMapMaker.git"
+  },
+  "author": "Felix",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phoenixzqy/JSGoogleStaticMapMaker/issues"
+  },
+  "homepage": "https://github.com/phoenixzqy/JSGoogleStaticMapMaker#readme"
+}
