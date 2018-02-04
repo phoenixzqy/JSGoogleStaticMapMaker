@@ -1063,6 +1063,8 @@ var _validatorjs = __webpack_require__(21);
 
 var _validatorjs2 = _interopRequireDefault(_validatorjs);
 
+var _Utility = __webpack_require__(30);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1106,8 +1108,9 @@ var MapMaker = function () {
   _createClass(MapMaker, [{
     key: 'toString',
     value: function toString() {
-      var options = this.cleanObject(this.options);
-      var auth = this.cleanObject(this.auth);
+      var util = new _Utility.Utility();
+      var options = util.cleanObject(this.options);
+      var auth = util.cleanObject(this.auth);
       var params = [];
       // options
       for (var i in options) {
@@ -1135,24 +1138,6 @@ var MapMaker = function () {
         params.push(i + '=' + auth[i]);
       }
       return encodeURI('' + this.GSMapUrl + params.join('&'));
-    }
-
-    // remove null objects
-
-  }, {
-    key: 'cleanObject',
-    value: function cleanObject(target) {
-      var result = {};
-      for (var i in target) {
-        if (target[i] === null || typeof target[i] === 'undefined') {
-          continue;
-        }if (Array.isArray(target[i])) {
-          result[i] = this.cleanObject(target[i]);
-        } else {
-          result[i] = target[i];
-        }
-      }
-      return result;
     }
   }, {
     key: 'getOptions',
@@ -3018,6 +3003,8 @@ var _validatorjs2 = _interopRequireDefault(_validatorjs);
 
 var _Location = __webpack_require__(29);
 
+var _Utility = __webpack_require__(30);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -3031,19 +3018,14 @@ var GMarker = function () {
     _classCallCheck(this, GMarker);
 
     this.options = {
+      icon: null,
+      anchor: null,
       color: null,
       label: null,
       size: null,
       locations: []
     };
-    this.options = Object.assign(this.options, options);
-
-    var validateMarker = new _validatorjs2.default(this.options, {
-      color: 'string',
-      label: 'string',
-      size: 'string|in:normal,tiny,mid,small',
-      locations: 'required|array'
-    });
+    this.setOptions(options);
   }
 
   _createClass(GMarker, [{
@@ -3053,7 +3035,45 @@ var GMarker = function () {
       // descriptors separated by the pipe character (|), followed by a set of one or more locations also separated by the
       // pipe character (|).
 
-      return 'markers=' + (this.options.color ? 'color:' + this.options.color + '|' : '') + (this.options.size ? 'size:' + this.options.size + '|' : '') + (this.options.label ? 'label:' + this.options.label + '|' : '') + this.options.locations.join('|');
+      var util = new _Utility.Utility();
+      var options = util.cleanObject(this.options);
+      var params = [];
+      for (var i in options) {
+        switch (i) {
+          case 'locations':
+            params.push(options[i].join('|'));
+            break;
+          case 'icon':
+            params.push(i + ':' + encodeURI(options[i].toString()));
+            break;
+          default:
+            params.push(i + ':' + options[i].toString());
+        }
+      }
+      return 'markers=' + params.join('|');
+    }
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.options;
+    }
+  }, {
+    key: 'setOptions',
+    value: function setOptions(options) {
+      this.options = Object.assign(this.options, options);
+
+      var validateMarker = new _validatorjs2.default(this.options, {
+        icon: 'string|required_with:anchor',
+        anchor: 'string|in:top,bottom,left,right,center,topleft,topright,bottomleft,bottomright',
+        color: 'string',
+        label: 'string',
+        size: 'string|in:normal,tiny,mid,small',
+        locations: 'required|array'
+      });
+
+      if (validateMarker.fails()) {
+        console.error('validation failed:', validateMarker.errors);
+      }
     }
   }]);
 
@@ -3114,7 +3134,7 @@ var Location = function () {
         lng: "required|numeric"
       });
       if (locationValidator.fails()) {
-        console.log('validation failed:', locationValidator.errors);
+        console.error('validation failed:', locationValidator.errors);
       } else {
         this.location = location;
       }
@@ -3138,6 +3158,60 @@ var Location = function () {
 }();
 
 exports.Location = Location;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Created by qiyuzhao on 2018-02-03.
+ */
+
+var Utility = function () {
+  function Utility() {
+    _classCallCheck(this, Utility);
+  }
+
+  _createClass(Utility, [{
+    key: 'cleanObject',
+
+
+    // remove null objects
+    value: function cleanObject(target) {
+      var result = void 0;
+      if (Array.isArray(target)) {
+        result = [];
+      } else {
+        result = {};
+      }
+      for (var i in target) {
+        if (target[i] === null || typeof target[i] === 'undefined') {
+          continue;
+        }if (Array.isArray(target[i])) {
+          result[i] = this.cleanObject(target[i]);
+        } else {
+          result[i] = target[i];
+        }
+      }
+      return result;
+    }
+  }]);
+
+  return Utility;
+}();
+
+exports.Utility = Utility;
 
 /***/ })
 /******/ ]);

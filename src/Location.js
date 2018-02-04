@@ -14,7 +14,7 @@ class Location {
         lng: "required|numeric"
       });
       if (locationValidator.fails()) {
-        console.log('validation failed:', locationValidator.errors);
+        console.error('validation failed:', locationValidator.errors);
       } else {
         this.location = location;
       }

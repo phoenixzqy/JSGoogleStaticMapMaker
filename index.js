@@ -1,7 +1,7 @@
 import {GMarker, GChartMarker} from 'src/GMarker';
 import {Location} from 'src/Location';
 import Validator from  'validatorjs';
-
+import {Utility} from 'src/Utility/Utility';
 
 class MapMaker {
   constructor(options:object, key:string, signature:string) {
@@ -39,8 +39,9 @@ class MapMaker {
   }
 
   toString():String {
-    let options = this.cleanObject(this.options);
-    let auth = this.cleanObject(this.auth);
+    let util = new Utility();
+    let options = util.cleanObject(this.options);
+    let auth = util.cleanObject(this.auth);
     let params = [];
     // options
     for (var i in options) {
@@ -70,24 +71,10 @@ class MapMaker {
     return encodeURI(`${this.GSMapUrl}${params.join('&')}`);
   }
 
-  // remove null objects
-  cleanObject(target) {
-    var result = {};
-    for (var i in target) {
-      if (target[i] === null || typeof target[i] === 'undefined') {
-        continue;
-      } if (Array.isArray(target[i])) {
-        result[i] = this.cleanObject(target[i]);
-      } else {
-        result[i] = target[i];
-      }
-    }
-    return result;
-  }
-
   getOptions() {
     return this.options;
   }
+
   setOptions(options) {
     this.options = Object.assign(this.options, options);
 

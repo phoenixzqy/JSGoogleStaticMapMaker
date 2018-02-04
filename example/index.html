@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>JSGoogleStaticMapMaker</title>
   <script src="../dist/JSGoogleStaticMapMaker.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
   <script>
     var GKey = 'AIzaSyB6XeHnou8qMVZo2mK0u8UffupNVTP0GPc';
     var maker = new GSMMaker.MapMaker({
@@ -11,26 +12,39 @@
       size: {width: 500, height: 400},
       markers: [
         new GSMMaker.GMarker({
-          color: 'red',
-          label: 'R',
-          locations: [new GSMMaker.Location({
-            lat: 49.182760,
-            lng: -123.075259
-          })]
+          icon: 'https://goo.gl/qvaV47',
+          locations: [
+            new GSMMaker.Location({
+              lat: 49.182760,
+              lng: -123.075259
+            })
+          ]
         }),
         new GSMMaker.GMarker({
           color: 'blue',
           label: 'B',
-          locations: [new GSMMaker.Location({
-            lat: 49.183227,
-            lng: -123.073773
-          })]
+          locations: [
+            new GSMMaker.Location({
+              lat: 49.183227,
+              lng: -123.073773
+            })
+          ]
         }),
       ]
     }, GKey);
+
+    function test(){
+      var url = maker.toString();
+      $("#result").val(url);
+      $("#image-container").attr('src', url);
+    }
   </script>
+
 </head>
-<body>
-<h1>tester</h1>
+<body style="width: 800px; margin: 0 auto;">
+<h1>result</h1>
+<button onclick="test();">test me</button>
+<textarea id="result" style="width: 100%; position: relative; height: 100px; margin: 20px 0;"></textarea>
+<img id="image-container" src="" alt="">
 </body>
 </html>
