@@ -1,7 +1,9 @@
-import {Marker, GChartMarker} from 'src/Marker';
-import 'validatorjs';
+import {GMarker, GChartMarker} from 'src/GMarker';
+import {Location} from 'src/Location';
+import Validator from  'validatorjs';
 
-class GStaticMapMaker {
+
+class MapMaker {
   constructor(options:object, key:string, signature:string) {
     this.GSMapUrl = 'https://maps.googleapis.com/maps/api/staticmap?';
     this.options = {
@@ -21,19 +23,84 @@ class GStaticMapMaker {
       style: null, // TODO
       markers: []
     };
-    this.key = key;
-    this.signature = signature;
+    this.auth = {
+      key: key,
+      signature: signature
+    };
+    // validate key and  signature
+    let validateKeyAndSignature = new Validator(this.auth, {
+      key: 'required|string',
+      signature: 'string'
+    });
+    if (validateKeyAndSignature.fails())
+      console.error('validation fails:', validateKeyAndSignature.errors);
 
-    let validator = new Validator();
+    this.setOptions(options);
+  }
+
+  toString():String {
+    let options = this.cleanObject(this.options);
+    let auth = this.cleanObject(this.auth);
+    let params = [];
+    // options
+    for (var i in options) {
+      switch (i) {
+        case 'center':
+          params.push(`${i}=` + options[i].toString());
+          break;
+        case 'size':
+          params.push(`${i}=${options.size.width}x${options.size.height}`);
+          break;
+        case 'path':
+          // TODO:
+          break;
+        case 'markers':
+          for (var m in options.markers) {
+            params.push(options.markers[m].toString())
+          }
+          break;
+        default:
+          params.push(`${i}=${options[i]}`)
+      }
+    }
+    // auth
+    for (var i in auth) {
+      params.push(`${i}=${auth[i]}`)
+    }
+    return encodeURI(`${this.GSMapUrl}${params.join('&')}`);
+  }
+
+  // remove null objects
+  cleanObject(target) {
+    var result = {};
+    for (var i in target) {
+      if (target[i] === null || typeof target[i] === 'undefined') {
+        continue;
+      } if (Array.isArray(target[i])) {
+        result[i] = this.cleanObject(target[i]);
+      } else {
+        result[i] = target[i];
+      }
+    }
+    return result;
+  }
+
+  getOptions() {
+    return this.options;
+  }
+  setOptions(options) {
+    this.options = Object.assign(this.options, options);
+
+
     // validate options
-    validator.validate(options, {
-      center: 'required_without:markers|string',
-      zoom: 'required_without:markers|min:0|max:21|number',
+    let validateOptions = new Validator(this.options, {
+      center: 'required_without:markers',
+      zoom: 'required_without:markers|min:0|max:21|integer',
       size: {
-        width: 'required|number',
-        height: 'required|number'
+        width: 'required|integer',
+        height: 'required|integer'
       },
-      scale: 'number|in:1,2',
+      scale: 'integer|in:1,2',
       format: 'string|in:JPEG,GIF,PNG',
       maptype: 'string|in:roadmap,satellite,hybrid,terrain',
       language: 'string', // google locale codes: https://developers.google.com/maps/faq#languagesupport
@@ -41,17 +108,15 @@ class GStaticMapMaker {
       // http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers
       path: 'array',
       visible: 'array',
-      style: null, // TODO
+      //style: null, // TODO
       markers: 'required_without:center|array'
     });
-    // validate key and  signature
-    validator.validate({
-      key: this.key,
-      signature: this.signature
-    }, {
-      key: 'required|type:string',
-      signature: 'string'
-    });
 
+    if (validateOptions.fails()) {
+      console.error('validation fails:', validateOptions.errors);
+    }
   }
 }
+
+
+export {MapMaker, GMarker, Location};

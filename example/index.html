@@ -3,7 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>JSGoogleStaticMapMaker</title>
-  <script src="../index.js"></script>
+  <script src="../dist/JSGoogleStaticMapMaker.js"></script>
+  <script>
+    var GKey = 'AIzaSyB6XeHnou8qMVZo2mK0u8UffupNVTP0GPc';
+    var maker = new GSMMaker.MapMaker({
+      center: new GSMMaker.Location('4611 viking way, richmond'),
+      size: {width: 500, height: 400},
+      markers: [
+        new GSMMaker.GMarker({
+          color: 'red',
+          label: 'R',
+          locations: [new GSMMaker.Location({
+            lat: 49.182760,
+            lng: -123.075259
+          })]
+        }),
+        new GSMMaker.GMarker({
+          color: 'blue',
+          label: 'B',
+          locations: [new GSMMaker.Location({
+            lat: 49.183227,
+            lng: -123.073773
+          })]
+        }),
+      ]
+    }, GKey);
+  </script>
 </head>
 <body>
 <h1>tester</h1>

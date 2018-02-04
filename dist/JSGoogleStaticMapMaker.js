@@ -1,3 +1,4 @@
+var GSMMaker =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1047,132 +1048,157 @@ module.exports = {
 "use strict";
 
 
-var _Marker = __webpack_require__(20);
-
-__webpack_require__(21);
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var GStaticMapMaker = function GStaticMapMaker(options, key, signature) {
-  _classCallCheck(this, GStaticMapMaker);
-
-  this.GSMapUrl = 'https://maps.googleapis.com/maps/api/staticmap?';
-  this.options = {
-    center: null,
-    zoom: null,
-    size: {
-      width: null,
-      height: null
-    },
-    scale: null,
-    format: null,
-    maptype: null,
-    language: null,
-    region: null,
-    path: [],
-    visible: null,
-    style: null, // TODO
-    markers: []
-  };
-  this.key = key;
-  this.signature = signature;
-
-  var validator = new Validator();
-  // validate options
-  validator.validate(options, {
-    center: 'required_without:markers|string',
-    zoom: 'required_without:markers|min:0|max:21|number',
-    size: {
-      width: 'required|number',
-      height: 'required|number'
-    },
-    scale: 'number|in:1,2',
-    format: 'string|in:JPEG,GIF,PNG',
-    maptype: 'string|in:roadmap,satellite,hybrid,terrain',
-    language: 'string', // google locale codes: https://developers.google.com/maps/faq#languagesupport
-    region: 'type:string', // Unicode region subtag identifiers: //
-    // http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers
-    path: 'array',
-    visible: 'array',
-    style: null, // TODO
-    markers: 'required_without:center|array'
-  });
-  // validate key and  signature
-  validator.validate({
-    key: this.key,
-    signature: this.signature
-  }, {
-    key: 'required|type:string',
-    signature: 'string'
-  });
-};
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Location = exports.GMarker = exports.MapMaker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var _GMarker = __webpack_require__(28);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _Location = __webpack_require__(29);
+
+var _validatorjs = __webpack_require__(21);
+
+var _validatorjs2 = _interopRequireDefault(_validatorjs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/**
- * Created by qiyuzhao on 2018-02-02.
- */
+var MapMaker = function () {
+  function MapMaker(options, key, signature) {
+    _classCallCheck(this, MapMaker);
 
-var Marker = function () {
-  function Marker(options) {
-    _classCallCheck(this, Marker);
-
+    this.GSMapUrl = 'https://maps.googleapis.com/maps/api/staticmap?';
     this.options = {
-      latlng: {
-        lat: null,
-        lng: null
+      center: null,
+      zoom: null,
+      size: {
+        width: null,
+        height: null
       },
-      color: null,
-      label: null,
-      size: ['normal', 'tiny', 'mid', 'small'].includes(options.size) ? options.size : 'normal'
+      scale: null,
+      format: null,
+      maptype: null,
+      language: null,
+      region: null,
+      path: [],
+      visible: null,
+      style: null, // TODO
+      markers: []
     };
-    this.options = Object.Assign(this.options, options);
-    this.options.size = ['normal', 'tiny', 'mid', 'small'].includes(this.options.size) ? this.options.size : 'normal';
+    this.auth = {
+      key: key,
+      signature: signature
+    };
+    // validate key and  signature
+    var validateKeyAndSignature = new _validatorjs2.default(this.auth, {
+      key: 'required|string',
+      signature: 'string'
+    });
+    if (validateKeyAndSignature.fails()) console.error('validation fails:', validateKeyAndSignature.errors);
+
+    this.setOptions(options);
   }
 
-  _createClass(Marker, [{
-    key: 'print',
-    value: function print() {
-      //TODO
+  _createClass(MapMaker, [{
+    key: 'toString',
+    value: function toString() {
+      var options = this.cleanObject(this.options);
+      var auth = this.cleanObject(this.auth);
+      var params = [];
+      // options
+      for (var i in options) {
+        switch (i) {
+          case 'center':
+            params.push(i + '=' + options[i].toString());
+            break;
+          case 'size':
+            params.push(i + '=' + options.size.width + 'x' + options.size.height);
+            break;
+          case 'path':
+            // TODO:
+            break;
+          case 'markers':
+            for (var m in options.markers) {
+              params.push(options.markers[m].toString());
+            }
+            break;
+          default:
+            params.push(i + '=' + options[i]);
+        }
+      }
+      // auth
+      for (var i in auth) {
+        params.push(i + '=' + auth[i]);
+      }
+      return encodeURI('' + this.GSMapUrl + params.join('&'));
+    }
+
+    // remove null objects
+
+  }, {
+    key: 'cleanObject',
+    value: function cleanObject(target) {
+      var result = {};
+      for (var i in target) {
+        if (target[i] === null || typeof target[i] === 'undefined') {
+          continue;
+        }if (Array.isArray(target[i])) {
+          result[i] = this.cleanObject(target[i]);
+        } else {
+          result[i] = target[i];
+        }
+      }
+      return result;
+    }
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.options;
+    }
+  }, {
+    key: 'setOptions',
+    value: function setOptions(options) {
+      this.options = Object.assign(this.options, options);
+
+      // validate options
+      var validateOptions = new _validatorjs2.default(this.options, {
+        center: 'required_without:markers',
+        zoom: 'required_without:markers|min:0|max:21|integer',
+        size: {
+          width: 'required|integer',
+          height: 'required|integer'
+        },
+        scale: 'integer|in:1,2',
+        format: 'string|in:JPEG,GIF,PNG',
+        maptype: 'string|in:roadmap,satellite,hybrid,terrain',
+        language: 'string', // google locale codes: https://developers.google.com/maps/faq#languagesupport
+        region: 'type:string', // Unicode region subtag identifiers: //
+        // http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers
+        path: 'array',
+        visible: 'array',
+        //style: null, // TODO
+        markers: 'required_without:center|array'
+      });
+
+      if (validateOptions.fails()) {
+        console.error('validation fails:', validateOptions.errors);
+      }
     }
   }]);
 
-  return Marker;
+  return MapMaker;
 }();
 
-var GChartMarker = function (_Marker) {
-  _inherits(GChartMarker, _Marker);
-
-  function GChartMarker(options) {
-    _classCallCheck(this, GChartMarker);
-
-    return _possibleConstructorReturn(this, (GChartMarker.__proto__ || Object.getPrototypeOf(GChartMarker)).call(this, options));
-  }
-
-  return GChartMarker;
-}(Marker);
-
-exports.Marker = Marker;
-exports.GChartMarker = GChartMarker;
+exports.MapMaker = MapMaker;
+exports.GMarker = _GMarker.GMarker;
+exports.Location = _Location.Location;
 
 /***/ }),
+/* 20 */,
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2968,6 +2994,150 @@ AsyncResolvers.prototype = {
 
 module.exports = AsyncResolvers;
 
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GChartMarker = exports.GMarker = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by qiyuzhao on 2018-02-02.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _validatorjs = __webpack_require__(21);
+
+var _validatorjs2 = _interopRequireDefault(_validatorjs);
+
+var _Location = __webpack_require__(29);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var GMarker = function () {
+  function GMarker(options) {
+    _classCallCheck(this, GMarker);
+
+    this.options = {
+      color: null,
+      label: null,
+      size: null,
+      locations: []
+    };
+    this.options = Object.assign(this.options, options);
+
+    var validateMarker = new _validatorjs2.default(this.options, {
+      color: 'string',
+      label: 'string',
+      size: 'string|in:normal,tiny,mid,small',
+      locations: 'required|array'
+    });
+  }
+
+  _createClass(GMarker, [{
+    key: 'toString',
+    value: function toString() {
+      //The set of markerStyles is declared at the beginning of the markers declaration and consists of zero or more style
+      // descriptors separated by the pipe character (|), followed by a set of one or more locations also separated by the
+      // pipe character (|).
+
+      return 'markers=' + (this.options.color ? 'color:' + this.options.color + '|' : '') + (this.options.size ? 'size:' + this.options.size + '|' : '') + (this.options.label ? 'label:' + this.options.label + '|' : '') + this.options.locations.join('|');
+    }
+  }]);
+
+  return GMarker;
+}();
+
+var GChartMarker = function (_GMarker) {
+  _inherits(GChartMarker, _GMarker);
+
+  function GChartMarker(options) {
+    _classCallCheck(this, GChartMarker);
+
+    return _possibleConstructorReturn(this, (GChartMarker.__proto__ || Object.getPrototypeOf(GChartMarker)).call(this, options));
+  }
+
+  return GChartMarker;
+}(GMarker);
+
+exports.GMarker = GMarker;
+exports.GChartMarker = GChartMarker;
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Location = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by qiyuzhao on 2018-02-02.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _validatorjs = __webpack_require__(21);
+
+var _validatorjs2 = _interopRequireDefault(_validatorjs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Location = function () {
+  function Location(location) {
+    _classCallCheck(this, Location);
+
+    if (typeof location === 'string') {
+      this.location = location;
+    } else if ((typeof location === 'undefined' ? 'undefined' : _typeof(location)) === 'object') {
+      var locationValidator = new _validatorjs2.default(location, {
+        lat: "required|numeric",
+        lng: "required|numeric"
+      });
+      if (locationValidator.fails()) {
+        console.log('validation failed:', locationValidator.errors);
+      } else {
+        this.location = location;
+      }
+    } else {
+      console.error('Location must be in String of address, or object of {lat: numeric, lng:numeric}');
+    }
+  }
+
+  _createClass(Location, [{
+    key: 'toString',
+    value: function toString() {
+      if (typeof this.location === 'string') {
+        return this.location;
+      } else {
+        return this.location.lat + ',' + this.location.lng;
+      }
+    }
+  }]);
+
+  return Location;
+}();
+
+exports.Location = Location;
 
 /***/ })
 /******/ ]);
