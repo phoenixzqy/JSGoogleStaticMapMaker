@@ -1,4 +1,5 @@
-import {GMarker, GChartMarker} from 'src/GMarker';
+import {GMarker} from 'src/GMarker';
+import {GPath} from 'src/GPath';
 import {Location} from 'src/Location';
 import Validator from  'validatorjs';
 import {Utility} from 'src/Utility/Utility';
@@ -18,7 +19,7 @@ class MapMaker {
       maptype: null,
       language: null,
       region: null,
-      path: [],
+      paths: [],
       visible: null,
       style: null, // TODO
       markers: []
@@ -33,7 +34,7 @@ class MapMaker {
       signature: 'string'
     });
     if (validateKeyAndSignature.fails())
-      console.error('validation fails:', validateKeyAndSignature.errors);
+      console.error(`${this.constructor.name} validation failed:`, validateKeyAndSignature.errors);
 
     this.setOptions(options);
   }
@@ -52,12 +53,14 @@ class MapMaker {
         case 'size':
           params.push(`${i}=${options.size.width}x${options.size.height}`);
           break;
-        case 'path':
-          // TODO:
+        case 'paths':
+          for (var p in options.paths) {
+            params.push(options.paths[p].toString());
+          }
           break;
         case 'markers':
           for (var m in options.markers) {
-            params.push(options.markers[m].toString())
+            params.push(options.markers[m].toString());
           }
           break;
         default:
@@ -88,22 +91,38 @@ class MapMaker {
         height: 'required|integer'
       },
       scale: 'integer|in:1,2',
-      format: 'string|in:JPEG,GIF,PNG',
+      format: 'string|in:png8,png,png32,gif,jpg,jpg-baseline',
       maptype: 'string|in:roadmap,satellite,hybrid,terrain',
       language: 'string', // google locale codes: https://developers.google.com/maps/faq#languagesupport
       region: 'type:string', // Unicode region subtag identifiers: //
       // http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers
-      path: 'array',
+      paths: 'array',
       visible: 'array',
       //style: null, // TODO
       markers: 'required_without:center|array'
     });
 
     if (validateOptions.fails()) {
-      console.error('validation fails:', validateOptions.errors);
+      console.error(`${this.constructor.name} validation failed:`, validateOptions.errors);
     }
+  }
+
+  addGMarker(markerOptions) {
+      this.options.markers.push(new GMarker(markerOptions));
+  }
+
+  clearGMarker() {
+    this.options.markers = [];
+  }
+
+  addGPath(pathOptions) {
+    this.options.paths.push(new GPath(pathOptions));
+  }
+
+  clearGPath() {
+    this.options.paths = [];
   }
 }
 
 
-export {MapMaker, GMarker, Location};
+export {MapMaker, GMarker, Location, GPath};

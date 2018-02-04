@@ -61,1137 +61,18 @@ var GSMMaker =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 22);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'The :attribute must be accepted.',
-  after: 'The :attribute must be after :after.',
-  after_or_equal: 'The :attribute must be equal or after :after_or_equal.',
-  alpha: 'The :attribute field must contain only alphabetic characters.',
-  alpha_dash: 'The :attribute field may only contain alpha-numeric characters, as well as dashes and underscores.',
-  alpha_num: 'The :attribute field must be alphanumeric.',
-  before: 'The :attribute must be before :before.',
-  before_or_equal: 'The :attribute must be equal or before :before_or_equal.',
-  between: 'The :attribute field must be between :min and :max.',
-  confirmed: 'The :attribute confirmation does not match.',
-  email: 'The :attribute format is invalid.',
-  date: 'The :attribute is not a valid date format.',
-  def: 'The :attribute attribute has errors.',
-  digits: 'The :attribute must be :digits digits.',
-  different: 'The :attribute and :different must be different.',
-  'in': 'The selected :attribute is invalid.',
-  integer: 'The :attribute must be an integer.',
-  min: {
-    numeric: 'The :attribute must be at least :min.',
-    string: 'The :attribute must be at least :min characters.'
-  },
-  max: {
-    numeric: 'The :attribute may not be greater than :max.',
-    string: 'The :attribute may not be greater than :max characters.'
-  },
-  not_in: 'The selected :attribute is invalid.',
-  numeric: 'The :attribute must be a number.',
-  present: 'The :attribute field must be present (but can be empty).',
-  required: 'The :attribute field is required.',
-  required_if: 'The :attribute field is required when :other is :value.',
-  required_unless: 'The :attribute field is required when :other is not :value.',
-  required_with: 'The :attribute field is required when :field is not empty.',
-  required_with_all: 'The :attribute field is required when :fields are not empty.',
-  required_without: 'The :attribute field is required when :field is empty.',
-  required_without_all: 'The :attribute field is required when :fields are empty.',
-  same: 'The :attribute and :same fields must match.',
-  size: {
-    numeric: 'The :attribute must be :size.',
-    string: 'The :attribute must be :size characters.'
-  },
-  string: 'The :attribute must be a string.',
-  url: 'The :attribute format is invalid.',
-  regex: 'The :attribute format is invalid.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-var replacements = {
-
-  /**
-   * Between replacement (replaces :min and :max)
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  between: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      min: parameters[0],
-      max: parameters[1]
-    });
-  },
-
-  /**
-   * Required_if replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  required_if: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      other: this._getAttributeName(parameters[0]),
-      value: parameters[1]
-    });
-  },
-
-  /**
-   * Required_unless replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  required_unless: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      other: this._getAttributeName(parameters[0]),
-      value: parameters[1]
-    });
-  },
-
-  /**
-   * Required_with replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  required_with: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      field: this._getAttributeName(parameters[0])
-    });
-  },
-
-  /**
-   * Required_with_all replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  required_with_all: function(template, rule) {
-    var parameters = rule.getParameters();
-    var getAttributeName = this._getAttributeName.bind(this);
-    return this._replacePlaceholders(rule, template, {
-      fields: parameters.map(getAttributeName).join(', ')
-    });
-  },
-
-  /**
-   * Required_without replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  required_without: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      field: this._getAttributeName(parameters[0])
-    });
-  },
-
-  /**
-   * Required_without_all replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  required_without_all: function(template, rule) {
-    var parameters = rule.getParameters();
-    var getAttributeName = this._getAttributeName.bind(this);
-    return this._replacePlaceholders(rule, template, {
-      fields: parameters.map(getAttributeName).join(', ')
-    });
-  },
-
- /**
-   * After replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  after: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      after: this._getAttributeName(parameters[0])
-    });
-  },
-
-  /**
-   * Before replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  before: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      before: this._getAttributeName(parameters[0])
-    });
-  },
-
-  /**
-   * After_or_equal replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  after_or_equal: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      after_or_equal: this._getAttributeName(parameters[0])
-    });
-  },
-
-  /**
-   * Before_or_equal replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  before_or_equal: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      before_or_equal: this._getAttributeName(parameters[0])
-    });
-  },
-
-  /**
-   * Same replacement.
-   *
-   * @param  {string} template
-   * @param  {Rule} rule
-   * @return {string}
-   */
-  same: function(template, rule) {
-    var parameters = rule.getParameters();
-    return this._replacePlaceholders(rule, template, {
-      same: this._getAttributeName(parameters[0])
-    });
-  },
-};
-
-function formatter(attribute) {
-  return attribute.replace(/[_\[]/g, ' ').replace(/]/g, '');
-}
-
-module.exports = {
-  replacements: replacements,
-  formatter: formatter
-};
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'Das :attribute Feld muss akzeptiert werden.',
-  after: 'Das :attribute muss ein Datum nach dem :after sein.',
-  after_or_equal: 'Das :attribute Datum muss kleiner oder gleich dem :after_or_equal sein.',
-  alpha: 'Das :attribute Feld darf nur aus Buchstaben bestehen.',
-  alpha_dash: 'Das :attribute Feld darf nur aus Buchstaben, Zahlen, Binde- und Unterstrichen bestehen.',
-  alpha_num: 'Das :attribute Feld darf nur aus Buchstaben und Zahlen bestehen.',
-  before: 'Das :attribute muss ein Datum vor dem :before sein.',
-  before_or_equal: 'Das :attribute Datum muss größer oder gleich dem :before_or_equal sein.',
-  between: 'Das :attribute Feld muss zwischen :min und :max liegen.',
-  confirmed: 'Das :attribute Feld stimmt nicht mit der Bestätigung überein.',
-  email: 'Das :attribute Format ist ungültig.',
-  date: 'Das :attribute Feld muss ein gültiges Datum sein.',
-  def: 'Das :attribute Feld hat Fehler.',
-  digits: 'Das :attribute Feld muss :digits Stellen haben.',
-  different: 'Die Felder :attribute und :different müssen sich unterscheiden.',
-  'in': 'Der gewählte Wert für :attribute ist ungültig.',
-  integer: 'Das :attribute Feld muss eine ganze Zahl sein.',
-  min: {
-    numeric: 'Das :attribute Feld muss mindestens :min sein.',
-    string: 'Das :attribute Feld muss mindestens :min Zeichen lang sein.'
-  },
-  max: {
-    numeric: 'Das :attribute Feld darf maximal :max sein.',
-    string: 'Das :attribute Feld darf maximal :max Zeichen haben.'
-  },
-  not_in: 'Der gewählte Wert für :attribute ist ungültig.',
-  numeric: 'Das :attribute Feld muss eine Zahl sein.',
-  present: 'Das Feld :attribute muss vorhanden sein (kann aber leer sein).',
-  required: 'Das :attribute Feld muss ausgefüllt sein.',
-  required_if: 'Das :attribute Feld muss ausgefüllt sein, wenn :other :value ist.',
-  same: 'Die Felder :attribute und :same müssen übereinstimmen.',
-  size: {
-    numeric: 'Das :attribute Feld muss gleich :size sein.',
-    string: 'Das :attribute Feld muss :size Zeichen lang sein.'
-  },
-  string: 'Das :attribute Feld muss ein Satz sein.',
-  url: 'Das Format von :attribute ist ungültig.',
-  regex: 'Das :attribute Format ist ungültig.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'Το πεδίο :attribute πρέπει να γίνει αποδεκτό.',
-  after: 'Το πεδίο :attribute πρέπει να είναι μία ημερομηνία μετά από :after.',
-  alpha: 'Το πεδίο :attribute μπορεί να περιέχει μόνο γράμματα.',
-  alpha_dash: 'Το πεδίο :attribute μπορεί να περιέχει μόνο γράμματα, αριθμούς, και παύλες.',
-  alpha_num: 'Το πεδίο :attribute μπορεί να περιέχει μόνο γράμματα και αριθμούς.',
-  between: 'Το πεδίο :attribute πρέπει να είναι μεταξύ :min και :max.',
-  confirmed: 'Η επιβεβαίωση του :attribute δεν ταιριάζει.',
-  email: 'Το πεδίο :attribute πρέπει να είναι μία έγκυρη διεύθυνση email.',
-  date: 'Το πεδίο :attribute δεν είναι έγκυρη ημερομηνία.',
-  def: 'Το πεδίο :attribute περιέχει σφάλματα.',
-  digits: 'Το πεδίο :attribute πρέπει να είναι :digits ψηφία.',
-  different: 'Το πεδίο :attribute  και :different πρέπει να είναι διαφορετικά.',
-  'in': 'Το επιλεγμένο :attribute δεν είναι έγκυρο.',
-  integer: 'Το πεδίο :attribute πρέπει να είναι ακέραιος.',
-  min: {
-    numeric: 'Το πεδίο :attribute πρέπει να είναι τουλάχιστον :min.',
-    string: 'Το πεδίο :attribute πρέπει να έχει τουλάχιστον :min χαρακτήρες.'
-  },
-  max: {
-    numeric: 'Το πεδίο :attribute δεν μπορεί να είναι μεγαλύτερο από :max.',
-    string: 'Το πεδίο :attribute δεν μπορεί να έχει περισσότερους από :max χαρακτήρες.'
-  },
-  not_in: 'Το επιλεγμένο :attribute δεν είναι αποδεκτό.',
-  numeric: 'Το πεδίο :attribute πρέπει να είναι αριθμός.',
-  present: 'The :attribute field must be present (but can be empty).',
-  required: 'Το πεδίο :attribute είναι απαραίτητο.',
-  required_if: 'Το πεδίο :attribute είναι απαραίτητο όταν το πεδίο :other είναι :value.',
-  same: 'Τα πεδία :attribute και :same πρέπει να είναι ίδια.',
-  size: {
-    numeric: 'Το πεδίο :attribute πρέπει να είναι :size.',
-    string: 'Το πεδίο :attribute πρέπει να είναι :size χαρακτήρες.'
-  },
-  string: 'Το πεδίο :attribute πρέπει να είναι αλφαριθμητικό.',
-  url: 'Το πεδίο :attribute δεν είναι έγκυρη διεύθυνση URL.',
-  regex: 'Η μορφή του :attribute δεν είναι αποδεκτή.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'El campo :attribute debe ser aceptado.',
-  after: 'El campo :attribute debe ser una fecha posterior a :after.',
-  alpha: 'El campo :attribute solo debe contener letras.',
-  alpha_dash: 'El campo :attribute solo debe contener letras, números y guiones.',
-  alpha_num: 'El campo :attribute solo debe contener letras y números.',
-  attributes: {},
-  between: 'El campo :attribute tiene que estar entre :min - :max.',
-  confirmed: 'La confirmación de :attribute no coincide.',
-  different: 'El campo :attribute y :other deben ser diferentes.',
-  digits: 'El campo :attribute debe tener :digits dígitos.',
-  email: 'El campo :attribute no es un correo válido.',
-  'in': 'El campo :attribute es inválido.',
-  integer: 'El campo :attribute debe ser un número entero.',
-  max: {
-    numeric: 'El campo :attribute no debe ser mayor a :max.',
-    string: 'El campo :attribute no debe ser mayor que :max caracteres.'
-  },
-  min: {
-    numeric: 'El tamaño del campo :attribute debe ser de al menos :min.',
-    string: 'El campo :attribute debe contener al menos :min caracteres.'
-  },
-  not_in: 'El campo :attribute es inválido.',
-  numeric: 'El campo :attribute debe ser numérico.',
-  present: 'El campo de :attribute debe estar presente (pero puede estar vacío).',
-  regex: 'El formato del campo :attribute es inválido.',
-  required: 'El campo :attribute es obligatorio.',
-  required_if: 'El campo :attribute es obligatorio cuando :other es :value.',
-  same: 'El campo :attribute y :other deben coincidir.',
-  size: {
-    numeric: 'El tamaño del campo :attribute debe ser :size.',
-    string: 'El campo :attribute debe contener :size caracteres.'
-  },
-  url: 'El formato de :attribute es inválido.'
-};
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'فیلد :attribute می بایست تایید شود',
-  alpha: 'فیلد :attribute می بایست فقط شامل حروف انگلیسی باشد',
-  alpha_dash: 'فیلد :attribute می بایست فقط شامل حروف انگلیسی و خط تیره و زیرخط باشد',
-  alpha_num: 'فیلد :attribute می بایست فقط شامل حروف و اعداد باشد',
-  between: 'فیلد :attribute می بایست بزرگتر از :min و کوچکتر از :max باشد',
-  confirmed: 'تطبیق فیلد :attribute صحیح نمی باشد',
-  email: 'فرمت ایمیل وارد شده در :attribute صحیح نمی‌باشد',
-  date: 'تاریخ درج شده در فیلد :attribute صحیح نیست',
-  def: 'فیلد :attribute اشکال دارد',
-  digits: 'فیلد :attribute می بایست شامل :digits رقم باشد',
-  different: 'فیلد :attribute می بایست مقداری غیر از :different داشته باشد',
-  'in': 'فیلد :attribute انتخاب شده صحیح نمی باشد',
-  integer: 'فیلد :attribute می بایست عددی باشد',
-  min: {
-    numeric: 'فیلد :attribute می بایست از :min بزرگتر باشد',
-    string: 'فیلد :attribute بایستی حداقل :min کاراکتر طول داشته باشد'
-  },
-  max: {
-    numeric: 'فیلد :attribute می بایست از :max کوچکتر باشد',
-    string: 'فیلد :attribute نباید بیشتر از :max کاراکتر طول داشته باشد'
-  },
-  not_in: 'فیلد :attribute انتخاب شده صحیح نمی باشد',
-  numeric: 'فیلد :attribute می بایست عددی باشد',
-  present: 'The :attribute field must be present (but can be empty).',
-  required: 'فیلد :attribute الزامی است',
-  required_if: 'در صورت دادن :value به :other تکمیل فیلد :attribute الزامی است',
-  same: 'فیلد :attribute می بایست با فیلد :same یکی باشد',
-  size: {
-    numeric: 'فیلد :attribute می بایست :size باشد',
-    string: 'فیلد :attribute می بایست :size کاراکتر طول داشته باشد'
-  },
-  string: 'فیلد :attribute می بایست متنی باشد',
-  url: 'آدرس فیلد :attribute صحیح نمی باشد',
-  regex: 'فرمت آدرس :attribute صحیح نمی باشد',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'Le champ :attribute doit être accepté.',
-  alpha: 'Le champ :attribute ne peut contenir que des caractères alphabétiques.',
-  alpha_dash: 'Le champ :attribute ne peut contenir que des caractères alphanumériques, des tirets et des underscores.',
-  alpha_num: 'Le champ :attribute ne peut contenir que des caractères alphanumériques.',
-  between: 'La longueur du champ :attribute doit être comprise entre :min and :max.',
-  confirmed: 'Le champ :attribute n\'est pas confirmé.',
-  email: 'Le champ :attribute contient un format invalide.',
-  def: 'Le champ :attribute contient un attribut erroné.',
-  digits: 'Le champ :attribute doit être composé de :digits chiffres.',
-  different: 'Les champs :attribute et :different doivent être différents.',
-  'in': 'Le champ :attribute est invalide.',
-  integer: 'Le champ :attribute doit être un entier.',
-  min: {
-    numeric: 'Le champ :attribute doit être supérieur à :min.',
-    string: 'Le champ :attribute doit contenir plus de :min caractères.'
-  },
-  max: {
-    numeric: 'Le champ :attribute doit être inférieur à :max.',
-    string: 'Le champ :attribute doit contenir moins de :max caractères.'
-  },
-  not_in: 'Le champ :attribute est invalide.',
-  numeric: 'Le champ :attribute doit être un chiffre.',
-  present: 'Le champ :attribute doit être présent (mais peut être vide).',
-  required: 'Le champ :attribute est requis.',
-  required_if: 'Le champ :attribute est requis quand :other est :value.',
-  same: 'Les champs :attribute et :same doivent correspondre.',
-  size: {
-    numeric: 'Le champ :attribute doit être égal à :size.',
-    string: 'Le champ :attribute doit contenir :size caractères.'
-  },
-  url: 'Le format du champ :attribute est invalide.',
-  regex: 'Le format du champ :attribute est invalide.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'Il campo :attribute deve essere accettato.',
-  alpha: 'Il campo :attribute deve contenere sono caratteri alfabetici.',
-  alpha_dash: 'Il campo :attribute può contenere solo caratteri alfanumerici oltre a trattini e trattini bassi.',
-  alpha_num: 'Il campo :attribute deve essere alfanumerico.',
-  between: 'Il campo :attribute deve essere compreso tra :min e :max.',
-  confirmed: 'Il campo conferma :attribute non è uguale.',
-  email: 'Il formato dell\'attributo :attribute non è valido.',
-  def: 'Gli attributi del campo :attribute contengono degli errori.',
-  digits: 'Il campo :attribute deve essere di :digits cifre.',
-  different: 'Il campo :attribute e :different devo essere diversi.',
-  'in': 'Il valore del campo :attribute non è valido.',
-  integer: 'Il campo :attribute deve essere un valore intero.',
-  min: {
-    numeric: 'Il campo :attribute deve essere maggiore o uguale di :min.',
-    string: 'Il campo :attribute deve essere composto da almeno :min caratteri.'
-  },
-  max: {
-    numeric: 'Il campo :attribute deve essere minore o uguale di :max.',
-    string: 'Il campo :attribute deve essere composto da massimo :max caratteri.'
-  },
-  not_in: 'Il campo :attribute non è valido.',
-  numeric: 'Il campo :attribute deve essere un numero.',
-  present: 'Il campo :attribute deve essere presente (ma può essere vuoto).',
-  required: 'Il campo :attribute è richiesto.',
-  required_if: 'Il campo :attribute è richiesto quando il campo :other è uguale a :value.',
-  same: 'I campi :attribute e :same devono essere uguali.',
-  size: {
-    numeric: 'La dimensione del campo :attribute deve essere uguale a :size.',
-    string: 'Il campo :attribute deve essere di :size caratteri.'
-  },
-  string: 'Il campo :attribute deve essere una stringa.',
-  url: 'Il formato del campo :attribute non è valido.',
-  regex: 'Il formato del campo :attribute non è valido.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    accepted: ':attributeを確認してください。',
-    alpha: ':attributeは英字のみで入力してください。',
-    alpha_dash: ':attributeは英字とダッシュと下線のみで入力してください。',
-    alpha_num: ':attributeは英数字のみで入力してください。',
-    between: ':attributeは:min〜:max文字で入力してください。',
-    confirmed: ':attributeは確認が一致しません。',
-    email: ':attributeは正しいメールアドレスを入力してください。',
-    date: ':attributeは正しい日付形式を入力してください',
-    def: ':attributeは検証エラーが含まれています。',
-    digits: ':attributeは:digitsの数字のみで入力してください。',
-    different: ':attributeと:differentは同じであってはなりません。',
-    'in': '選択された:attributeは無効です。',
-    integer: ':attributeは整数で入力してください。',
-    min        : {
-        numeric : ":attributeは:min以上で入力してください。",
-        string  : ":attributeは:min文字以上で入力してください。"
-    },
-    max : {
-        numeric : ":attributeは:max以下で入力してください。",
-        string  : ":attributeは:max文字以下で入力してください。"
-    },
-    not_in      : "選択された:attributeは無効です。",
-    numeric     : ":attributeは数値で入力してください。",
-    present: 'The :attribute field must be present (but can be empty).',
-    required    : ":attributeは必須です。",
-    required_if : ":otherは:valueになったら:attributeは必須です。",
-    same        : ":attributeと:sameは同じでなければなりません。",
-    size        : {
-        numeric : ":attributeは:sizeを入力してください。",
-        string  : ":attributeは:size文字で入力してください。"
-    },
-    url        : ":attributeは正しいURIを入力してください。",
-    regex      : ":attributeの値 \":value\" はパターンにマッチする必要があります。",
-    attributes : {}
-};
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: ':attribute må være akseptert.',
-  alpha: ':attribute feltet kan kun inneholde alfabetiske tegn.',
-  alpha_dash: ':attribute feltet kan kun inneholde alfanumeriske tegn, i tillegg til bindestreker og understreker.',
-  alpha_num: ':attribute feltet må være alfanumerisk.',
-  between: ':attribute feltet må være mellom :min og :max.',
-  confirmed: ':attribute feltet stemmer ikke overens med bekreftelsen.',
-  email: ':attribute formatet er ugyldig.',
-  date: ':attribute er et ugyldig datoformat.',
-  def: ':attribute attributtet har feil.',
-  digits: ':attribute må være på :digits siffer.',
-  different: ':attribute og :different må være forskjellige.',
-  'in': 'Den oppgitte verdien for :attribute er ugyldig.',
-  integer: ':attribute må være et heltall.',
-  min: {
-    numeric: ':attribute må minst være :min.',
-    string: ':attribute må være på minst :min tegn.'
-  },
-  max: {
-    numeric: ':attribute kan ikke være større enn :max.',
-    string: ':attribute kan maks ha :max tegn.'
-  },
-  'not_in': 'Den oppgitte verdien for :attribute er ugyldig.',
-  numeric: ':attribute må være et tall.',
-  present: 'The :attribute field must be present (but can be empty).',
-  required: ':attribute feltet er påkrevd.',
-  required_if: ':attribute er påkrevd når :other er :value.',
-  same: ':attribute og :same må være like.',
-  size: {
-    numeric: ':attribute må ha størrelsen :size.',
-    string: ':attribute må ha :size tegn.'
-  },
-  string: ':attribute må være tekst.',
-  url: ':attribute formatet er ugyldig.',
-  regex: ':attribute formatet er ugyldig.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'Het :attribute veld moet geaccepteerd worden.',
-  after: ':attribute moet een datum na :after zijn.',
-  after_or_equal: 'De :attribute datum moet op of na :after_or_equal zijn.',
-  alpha: 'Het :attribute veld mag alleen maar letters bevatten.',
-  alpha_dash: 'Het :attribute veld mag alleen maar letters, cijfers en (liggende) streepjes bevatten.',
-  alpha_num: 'Het :attribute veld mag alleen maar letters en cijfers bevatten.',
-  before: ':attribute moet vòòr :before zijn.',
-  before_or_equal: ':attribute moet vòòr of op :before_or_equal zijn.',
-  between: 'Het :attribute veld moet tussen :min en :max liggen.',
-  confirmed: 'Het :attribute veld komt niet met de bevestiging overeen.',
-  email: 'Het :attribute formaat is ongeldig.',
-  date: 'Het :attribute veld moet een geldige datum zijn.',
-  def: 'Het :attribute veld bevat fouten.',
-  digits: 'Het :attribute veld moet :digits cijfers hebben.',
-  different: 'Het :attribute en :different veld moeten verschillend zijn.',
-  'in': 'De gekozen waarde voor :attribute is ongeldig.',
-  integer: 'Het :attribute veld moet een geheel getal zijn.',
-  min: {
-    numeric: 'Het :attribute veld moet minstens :min zijn.',
-    string: 'Het :attribute veld moet minstens :min karakters bevatten.'
-  },
-  max: {
-    numeric: 'Het :attribute veld mag maximaal :max zijn.',
-    string: 'Het :attribute veld mag niet meer dan :max karakters bevatten.'
-  },
-  not_in: 'De gekozen waarde voor :attribute is ongeldig.',
-  numeric: 'Het :attribute veld moet een getal zijn.',
-  present: 'Het :attribute veld moet aanwezig zijn (maar mag leeg zijn).',
-  required: 'Het :attribute veld moet ingevuld zijn.',
-  required_if: 'Het :attribute veld moet ingevuld zijn, wanneer :other :value is.',
-  required_unless: 'Het :attribute veld moet ingevuld zijn, wanneer :other niet :value is.',
-  required_with: 'Het :attribute veld moet ingevuld zijn, wanneer :field niet leeg is.',
-  required_with_all: 'Het :attribute veld moet ingevuld zijn, wanneer :fields niet leeg zijn.',
-  required_without: 'Het :attribute veld moet ingevuld zijn, wanneer :field leeg is.',
-  required_without_all: 'Het :attribute veld moet ingevuld zijn, wanneer :fields leeg zijn.',
-  same: 'De :attribute en :same velden moeten overeenkomen.',
-  size: {
-    numeric: 'Het :attribute veld moet :size zijn.',
-    string: 'Het :attribute veld moet :size karakters bevatten.'
-  },
-  string: 'Het :attribute veld moet een woord of zin zijn.',
-  url: 'Het :attribute veld heeft een ongeldig formaat.',
-  regex: 'Het :attribute veld heeft een ongeldig formaat.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    accepted: 'Pole :attribute musi być zaakceptowane.',
-    alpha: 'Pole :attribute może zawierać tylko litery.',
-    alpha_dash: 'Pole :attribute moze zawierać tylko litery, myślnik i podrkeślenie.',
-    alpha_num: 'Pole :attribute moze zawierac tylko znaki alfanumeryczne.',
-    between: 'Pole :attribute musi mieć długość od :min do :max.',
-    confirmed: 'Pole :attribute nie spełnia warunku potwierdzenia.',
-    email: 'Pole :attribute ma niepoprawny format adresu email.',
-    date: 'Pole :attribute musi mieć poprawny format daty.',
-    def: 'Pole :attribute zawiera błędy.',
-    digits: 'Pole :attribute może zawierać tylko cyfry ze zbioru :digits.',
-    different: 'Pola :attribute i :different muszą się różnić.',
-    'in': 'Pole :attribute musi należeć do zbioru :in.',
-    integer: 'Pole :attribute musi być liczbą całkowitą.',
-    min: {
-        numeric: 'Pole :attribute musi być równe conajmniej :min.',
-        string: 'Pole :attribute musi zawierać conajmniej :min znaków.'
-    },
-    max: {
-        numeric: 'Pole :attribute nie moze być większe :max.',
-        string: 'Pole :attribute nie moze być dłuższe niż :max znaków.'
-    },
-    not_in: 'Pole :attribute nie może należeć do zbioru :not_in.',
-    numeric: 'Pole :attribute musi być liczbą.',
-    present: 'Polu :attribute musi być obecny (ale może być pusta).',
-    required: 'Pole :attribute jest wymagane.',
-    required_if: 'Pole :attribute jest wymagane jeśli pole :other jest równe :value.',
-    same: 'Pola :attribute i :same muszą być takie same.',
-    size: {
-        numeric: 'Pole :attribute musi być równe :size.',
-        string: 'Pole :attribute musi zawierać :size znaków.'
-    },
-    string: 'Pole :attribute musi być ciągiem znaków.',
-    url: 'Pole :attribute musi być poprawnym adresem URL.',
-    regex: 'Pole :attribute nie spełnia warunku.',
-    attributes: {}
-};
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'O :attribute precisa ser aceito.',
-  alpha: 'O campo :attribute só pode conter letras.',
-  alpha_dash: 'O campo :attribute só pode conter letras, números, hífens e sublinha.',
-  alpha_num: 'O campo :attribute só pode conter letras e números.',
-  between: 'O campo :attribute precisa estar entre :min e :max.',
-  confirmed: 'A confirmação de :attribute não coincide.',
-  email: 'O formato de :attribute é inválido.',
-  date: 'O :attribute não é um formato de data válido',
-  def: 'O atributo :attribute contém erros.',
-  digits: 'O atributo :attribute precisa ter :digits dígitos.',
-  different: 'O :attribute e :different precisam ser diferentes.',
-  'in': 'O atributo selecionado :attribute é inválido.',
-  integer: 'O :attribute precisa ser um inteiro.',
-  min: {
-    numeric: 'O :attribute precisa ser no mínimo :min.',
-    string: 'O :attribute precisa ter no mínimo :min caracteres.'
-  },
-  max: {
-    numeric: 'O :attribute não pode ser maior que :max.',
-    string: 'O :attribute não pode ter mais que :max caracteres.'
-  },
-  not_in: 'O :attribute selecionado é inválido.',
-  numeric: 'O :attribute precisa ser um número.',
-  present: 'O campo :attribute deve estar presente (mas pode estar vazio).',
-  required: 'O campo :attribute é obrigatório.',
-  required_if: 'O campo :attribute é obrigatório quando :other é :value.',
-  same: 'Os campos :attribute e :same precisam ser iguais.',
-  size: {
-    numeric: 'O :attribute precisa ser :size.',
-    string: 'O :attribute precisa ter :size caracteres.'
-  },
-  string: 'O :attribute precisa ser uma palavra.',
-  url: 'O formato de :attribute é inválido.',
-  regex: 'O formato de :attribute é inválido.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: 'Вы должны принять :attribute.',
-  alpha: 'Поле :attribute может содержать только буквы.',
-  alpha_dash: 'Поле :attribute может содержать только буквы, цифры, дефисы и символы подчёркивания.',
-  alpha_num: 'Поле :attribute может содержать только буквы и цифры.',
-  between: 'Поле :attribute должно быть между :min и :max.',
-  confirmed: 'Поле :attribute не совпадает с подтверждением.',
-  email: 'Поле :attribute должно быть действительным электронным адресом.',
-  def: 'Поле :attribute содержит ошибки.',
-  digits: 'Длина цифрового поля :attribute должна быть :digits.',
-  different: 'Поля :attribute и :different должны различаться.',
-  'in': 'Выбранное значение для :attribute ошибочно.',
-  integer: 'Поле :attribute должно быть целым числом.',
-  min: {
-    numeric: 'Значение поля :attribute должно быть больше или равно :min.',
-    string: 'Количество символов в поле :attribute должно быть не менее :min.'
-  },
-  max: {
-    numeric: 'Значение поля :attribute должно быть меньше или равно :max.',
-    string: 'Количество символов в поле :attribute не может превышать :max.'
-  },
-  not_in: 'Выбранное значение для :attribute ошибочно.',
-  numeric: 'Поле :attribute должно быть числом.',
-  present: 'Поле :attribute должно присутствовать (но может быть пустым).',
-  required: 'Поле :attribute обязательно для заполнения.',
-  required_if: 'Поле :attribute требуется когда значения поля :other равно :value.',
-  same: 'Значение :attribute должно совпадать с :same.',
-  size: {
-    numeric: 'Значение поля :attribute должно быть равным :size.',
-    string: 'Количество символов в поле :attribute должно быть равно :size.'
-  },
-  url: 'Поле :attribute должно содержать валидный URL.',
-  regex: 'Неверный формат поля :attribute.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: ':attribute kabul edilmeli.',
-  alpha: ':attribute alanı sadece harflerden oluşabilir.',
-  alpha_dash: ':attribute alanı sadece alfa-nümerik, tire ve alt çizgi karakterlerden oluşabilir.',
-  alpha_num: ':attribute alanı alfa-nümerik olmalıdır.',
-  between: ':attribute alanı :min ile :max arasında olabilir.',
-  confirmed: ':attribute uyuşmuyor.',
-  email: ':attribute formatı geçersiz.',
-  date: ':attribute geöerli bir tarih alanı değil.',
-  def: ':attribute hatalar içeriyor.',
-  digits: ':attribute sadece rakamlardan oluşabilir.',
-  different: ':attribute ve :different farklı olmalı.',
-  'in': 'Seçilen :attribute geçerli değil.',
-  integer: ':attribute tam sayı olmalı.',
-  min: {
-    numeric: ':attribute en az :min olmalı.',
-    string: ':attribute en az :min karakter uzunluğunda olmalı.'
-  },
-  max: {
-    numeric: ':attribute en çok :max olabilir.',
-    string: ':attribute uzunluğu en çok :max karakter uzunluğunda olabilir.'
-  },
-  not_in: 'Seçilen :attribute geçerli değil.',
-  numeric: ':attribute sayı olmalı.',
-  present: ':attribute alanı bulunmalıdır (ancak boş olabilir).',
-  required: ':attribute alanı gerekli.',
-  required_if: ':attribute alanı :other alanı :value olduğunda gerekli.',
-  same: ':attribute ve :same aynı olmalı.',
-  size: {
-    numeric: ':attribute :size olmalı.',
-    string: ':attribute :size karakter uzunluğunda olmalı.'
-  },
-  string: ':attribute alfa-numerik olmalı.',
-  url: ':attribute formatı geçersiz.',
-  regex: ':attribute formatı geçersiz.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: ':attribute повиннен бути прийнятий.',
-  alpha: 'Поле :attribute може складатись тільки з літер.',
-  alpha_dash: 'Поле :attribute може складатись тільки з літер, чисел, дефісів та символів підкреслення.',
-  alpha_num: 'Поле :attribute може складатись тільки з літер та чисел.',
-  between: 'Значення поля :attribute повинно знаходитись між :min і :max.',
-  confirmed: 'Поле :attribute не співпадає з підтвердженням.',
-  email: 'Значення поля :attribute повинно бути існуючою електронною адресою.',
-  def: 'Поле :attribute містить помилки.',
-  digits: 'Довжина числового поля :attribute повинна бути :digits.',
-  different: 'Поля :attribute і :different повинні відрізнятись.',
-  'in': 'Обране значення для :attribute помилкове.',
-  integer: 'Значення поля :attribute повинно бути цілим числом.',
-  min: {
-    numeric: 'Значення поля :attribute повинно бути більшим або рівним :min.',
-    string: 'Кількість символів в полі :attribute повинна бути не менше :min.'
-  },
-  max: {
-    numeric: 'Значення поля :attribute повинно бути менше або рівне :max.',
-    string: 'Кількість символів в полі :attribute не може превищувати :max.'
-  },
-  not_in: 'Обране значення для :attribute помилкове.',
-  numeric: 'Значення поля :attribute повинно бути числом.',
-  present: 'Поле :attribute повинно бути присутнім (але може бути пустим).',
-  required: 'Поле :attribute обов\'язкове для заповнення.',
-  required_if: 'Поле :attribute потрібне у випадку коли значення поля :other рівне :value.',
-  same: 'Значеня поля :attribute повинно співпадати з :same.',
-  size: {
-    numeric: 'Значення поля :attribute повинно бути рівним :size.',
-    string: 'Кількість символів в полі :attribute повинна бути рівною :size.'
-  },
-  url: 'Поле :attribute повинне містити валідний URL.',
-  regex: 'Неправильний формат значення :attribute.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: ':attribute phải được chấp nhận.',
-  alpha: 'Trường :attribute phải là ký tự',
-  alpha_dash: ':attribute chỉ chấp nhận ký tự chữ cái, số, dấu gạch chéo và gạch dưới.',
-  alpha_num: ':attribute phải là ký tự chữ cái hoặc chữ số.',
-  between: ':attribute phải nằm trong khoảng :min và :max.',
-  confirmed: ':attribute xác nhận không trùng khớp.',
-  email: ':attribute không phải là email.',
-  date: ':attribute không phải là ngày hợp lệ',
-  def: 'Thuộc tính :attribute có lỗi.',
-  digits: ':attribute phải là số và có chiều dài bằng :digits.',
-  different: 'Giá trị của hai trường :attribute và :different phải khác nhau.',
-  'in': 'Giá trị được chọn của :attribute không hợp lệ.',
-  integer: ':attribute phải là số nguyên.',
-  min: {
-    numeric: ':attribute phải lớn hơn hoặc bằng :min.',
-    string: ':attribute phải có ít nhất :min ký tự.'
-  },
-  max: {
-    numeric: ':attribute phải nhỏ hơn hoặc bằng :max.',
-    string: ':attribute phải có ít hơn :max ký tự.'
-  },
-  not_in: 'Giá trị được chọn của trường :attribute không hợp lệ.',
-  numeric: ':attribute phải là số.',
-  present: 'Trường :attribute phải có mặt (nhưng có thể để trống).',
-  required: ':attribute bắt buộc nhập.',
-  required_if: ':attribute là bắt buộc khi :other có giá trị :value.',
-  same: 'Giá trị của :attribute và :same phải như nhau.',
-  size: {
-    numeric: ':attribute phải có chiều dài của bằng :size.',
-    string: 'Số ký tự của :attribute phải là :size ký tự.'
-  },
-  string: ':attribute không phải là một chuỗi',
-  url: ':attribute không phải là một Url hợp lệ.',
-  regex: ':attribute không đúng định dạng',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: ':attribute必须是可接受的.',
-  alpha: ':attribute只能包含字母.',
-  alpha_dash: ':attribute只能包含字母,连字符和下划线.',
-  alpha_num: ':attribute只能包含字母和数字.',
-  between: ':attribute的(大小,长度等)只能在:min和:max之间.',
-  confirmed: ':attribute确认不一致.',
-  email: ':attribute格式不正确.',
-  date: ':attribute日期格式错误.',
-  def: ':attribute属性错误.',
-  digits: ':attribute必须是:digits位小数.',
-  different: ':attribute和:different必须不同.',
-  'in': '选择的:attribute无效',
-  integer: ':attribute必须是一个整数.',
-  min: {
-    numeric: ':attribute不能小于:min.',
-    string: ':attribute长度不能小于:min.'
-  },
-  max: {
-    numeric: ':attribute不能大于:max.',
-    string: ':attribute长度不能大于:max.'
-  },
-  not_in: '所选的:attribute无效.',
-  numeric: ':attribute必须是一个数字.',
-  present: 'The :attribute field must be present (but can be empty).',
-  required: ':attribute不能为空.',
-  required_if: '当:other是:value时,:attribute不能为空.',
-  same: ':attribute和:same必须一致.',
-  size: {
-    numeric: ':attribute必须等于:size.',
-    string: ':attribute的长度必须等于:size.'
-  },
-  string: ':attribute必须是一个字符串.',
-  url: ':attribute格式不正确.',
-  regex: ':attribute格式不正确.',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = {
-  accepted: ':attribute必須接受。',
-  alpha: ':attribute只能包含字母。',
-  alpha_dash: ':attribute只能包含字母，連字符和下划線。',
-  alpha_num: ':attribute只能包含字母和數字。',
-  between: ':attribute的值只能在:min和:max之間。',
-  confirmed: ':attribute與確認輸入不一致。',
-  email: ':attribute的格式錯誤。',
-  date: ':attribute的日期格式錯誤。',
-  def: ':attribute屬性錯誤。',
-  digits: ':attribute必須是:digits位小數。',
-  different: ':attribute和:different必須不同。',
-  'in': '選擇的:attribute無效',
-  integer: ':attribute必須是一個整數。',
-  min: {
-    numeric: ':attribute不能小於:min。',
-    string: ':attribute的長度不能小於:min.'
-  },
-  max: {
-    numeric: ':attribute不能大於:max。',
-    string: ':attribute的長度不能大於:max.'
-  },
-  not_in: '所選的:attribute無效。',
-  numeric: ':attribute必須是一個數字。',
-  present: 'The :attribute field must be present (but can be empty).',
-  required: ':attribute不能空白。',
-  required_if: '當:other是:value時,:attribute不能空白。',
-  same: ':attribute和:same必須一致。',
-  size: {
-    numeric: ':attribute必須等於:size。',
-    string: ':attribute的長度必須等於:size.'
-  },
-  string: ':attribute必須是一個字串。',
-  url: ':attribute格式不正確。',
-  regex: ':attribute格式不正確。',
-  attributes: {}
-};
-
-
-/***/ }),
-/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Location = exports.GMarker = exports.MapMaker = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _GMarker = __webpack_require__(28);
-
-var _Location = __webpack_require__(29);
-
-var _validatorjs = __webpack_require__(21);
-
-var _validatorjs2 = _interopRequireDefault(_validatorjs);
-
-var _Utility = __webpack_require__(30);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var MapMaker = function () {
-  function MapMaker(options, key, signature) {
-    _classCallCheck(this, MapMaker);
-
-    this.GSMapUrl = 'https://maps.googleapis.com/maps/api/staticmap?';
-    this.options = {
-      center: null,
-      zoom: null,
-      size: {
-        width: null,
-        height: null
-      },
-      scale: null,
-      format: null,
-      maptype: null,
-      language: null,
-      region: null,
-      path: [],
-      visible: null,
-      style: null, // TODO
-      markers: []
-    };
-    this.auth = {
-      key: key,
-      signature: signature
-    };
-    // validate key and  signature
-    var validateKeyAndSignature = new _validatorjs2.default(this.auth, {
-      key: 'required|string',
-      signature: 'string'
-    });
-    if (validateKeyAndSignature.fails()) console.error('validation fails:', validateKeyAndSignature.errors);
-
-    this.setOptions(options);
-  }
-
-  _createClass(MapMaker, [{
-    key: 'toString',
-    value: function toString() {
-      var util = new _Utility.Utility();
-      var options = util.cleanObject(this.options);
-      var auth = util.cleanObject(this.auth);
-      var params = [];
-      // options
-      for (var i in options) {
-        switch (i) {
-          case 'center':
-            params.push(i + '=' + options[i].toString());
-            break;
-          case 'size':
-            params.push(i + '=' + options.size.width + 'x' + options.size.height);
-            break;
-          case 'path':
-            // TODO:
-            break;
-          case 'markers':
-            for (var m in options.markers) {
-              params.push(options.markers[m].toString());
-            }
-            break;
-          default:
-            params.push(i + '=' + options[i]);
-        }
-      }
-      // auth
-      for (var i in auth) {
-        params.push(i + '=' + auth[i]);
-      }
-      return encodeURI('' + this.GSMapUrl + params.join('&'));
-    }
-  }, {
-    key: 'getOptions',
-    value: function getOptions() {
-      return this.options;
-    }
-  }, {
-    key: 'setOptions',
-    value: function setOptions(options) {
-      this.options = Object.assign(this.options, options);
-
-      // validate options
-      var validateOptions = new _validatorjs2.default(this.options, {
-        center: 'required_without:markers',
-        zoom: 'required_without:markers|min:0|max:21|integer',
-        size: {
-          width: 'required|integer',
-          height: 'required|integer'
-        },
-        scale: 'integer|in:1,2',
-        format: 'string|in:JPEG,GIF,PNG',
-        maptype: 'string|in:roadmap,satellite,hybrid,terrain',
-        language: 'string', // google locale codes: https://developers.google.com/maps/faq#languagesupport
-        region: 'type:string', // Unicode region subtag identifiers: //
-        // http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers
-        path: 'array',
-        visible: 'array',
-        //style: null, // TODO
-        markers: 'required_without:center|array'
-      });
-
-      if (validateOptions.fails()) {
-        console.error('validation fails:', validateOptions.errors);
-      }
-    }
-  }]);
-
-  return MapMaker;
-}();
-
-exports.MapMaker = MapMaker;
-exports.GMarker = _GMarker.GMarker;
-exports.Location = _Location.Location;
-
-/***/ }),
-/* 20 */,
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Rules = __webpack_require__(22);
-var Lang = __webpack_require__(23);
-var Errors = __webpack_require__(26);
-var Attributes = __webpack_require__(1);
-var AsyncResolvers = __webpack_require__(27);
+var Rules = __webpack_require__(24);
+var Lang = __webpack_require__(25);
+var Errors = __webpack_require__(28);
+var Attributes = __webpack_require__(2);
+var AsyncResolvers = __webpack_require__(29);
 
 var Validator = function (input, rules, customMessages) {
   var lang = Validator.getDefaultLang();
@@ -1841,7 +722,1366 @@ module.exports = Validator;
 
 
 /***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'The :attribute must be accepted.',
+  after: 'The :attribute must be after :after.',
+  after_or_equal: 'The :attribute must be equal or after :after_or_equal.',
+  alpha: 'The :attribute field must contain only alphabetic characters.',
+  alpha_dash: 'The :attribute field may only contain alpha-numeric characters, as well as dashes and underscores.',
+  alpha_num: 'The :attribute field must be alphanumeric.',
+  before: 'The :attribute must be before :before.',
+  before_or_equal: 'The :attribute must be equal or before :before_or_equal.',
+  between: 'The :attribute field must be between :min and :max.',
+  confirmed: 'The :attribute confirmation does not match.',
+  email: 'The :attribute format is invalid.',
+  date: 'The :attribute is not a valid date format.',
+  def: 'The :attribute attribute has errors.',
+  digits: 'The :attribute must be :digits digits.',
+  different: 'The :attribute and :different must be different.',
+  'in': 'The selected :attribute is invalid.',
+  integer: 'The :attribute must be an integer.',
+  min: {
+    numeric: 'The :attribute must be at least :min.',
+    string: 'The :attribute must be at least :min characters.'
+  },
+  max: {
+    numeric: 'The :attribute may not be greater than :max.',
+    string: 'The :attribute may not be greater than :max characters.'
+  },
+  not_in: 'The selected :attribute is invalid.',
+  numeric: 'The :attribute must be a number.',
+  present: 'The :attribute field must be present (but can be empty).',
+  required: 'The :attribute field is required.',
+  required_if: 'The :attribute field is required when :other is :value.',
+  required_unless: 'The :attribute field is required when :other is not :value.',
+  required_with: 'The :attribute field is required when :field is not empty.',
+  required_with_all: 'The :attribute field is required when :fields are not empty.',
+  required_without: 'The :attribute field is required when :field is empty.',
+  required_without_all: 'The :attribute field is required when :fields are empty.',
+  same: 'The :attribute and :same fields must match.',
+  size: {
+    numeric: 'The :attribute must be :size.',
+    string: 'The :attribute must be :size characters.'
+  },
+  string: 'The :attribute must be a string.',
+  url: 'The :attribute format is invalid.',
+  regex: 'The :attribute format is invalid.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var replacements = {
+
+  /**
+   * Between replacement (replaces :min and :max)
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  between: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      min: parameters[0],
+      max: parameters[1]
+    });
+  },
+
+  /**
+   * Required_if replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  required_if: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      other: this._getAttributeName(parameters[0]),
+      value: parameters[1]
+    });
+  },
+
+  /**
+   * Required_unless replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  required_unless: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      other: this._getAttributeName(parameters[0]),
+      value: parameters[1]
+    });
+  },
+
+  /**
+   * Required_with replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  required_with: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      field: this._getAttributeName(parameters[0])
+    });
+  },
+
+  /**
+   * Required_with_all replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  required_with_all: function(template, rule) {
+    var parameters = rule.getParameters();
+    var getAttributeName = this._getAttributeName.bind(this);
+    return this._replacePlaceholders(rule, template, {
+      fields: parameters.map(getAttributeName).join(', ')
+    });
+  },
+
+  /**
+   * Required_without replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  required_without: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      field: this._getAttributeName(parameters[0])
+    });
+  },
+
+  /**
+   * Required_without_all replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  required_without_all: function(template, rule) {
+    var parameters = rule.getParameters();
+    var getAttributeName = this._getAttributeName.bind(this);
+    return this._replacePlaceholders(rule, template, {
+      fields: parameters.map(getAttributeName).join(', ')
+    });
+  },
+
+ /**
+   * After replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  after: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      after: this._getAttributeName(parameters[0])
+    });
+  },
+
+  /**
+   * Before replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  before: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      before: this._getAttributeName(parameters[0])
+    });
+  },
+
+  /**
+   * After_or_equal replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  after_or_equal: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      after_or_equal: this._getAttributeName(parameters[0])
+    });
+  },
+
+  /**
+   * Before_or_equal replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  before_or_equal: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      before_or_equal: this._getAttributeName(parameters[0])
+    });
+  },
+
+  /**
+   * Same replacement.
+   *
+   * @param  {string} template
+   * @param  {Rule} rule
+   * @return {string}
+   */
+  same: function(template, rule) {
+    var parameters = rule.getParameters();
+    return this._replacePlaceholders(rule, template, {
+      same: this._getAttributeName(parameters[0])
+    });
+  },
+};
+
+function formatter(attribute) {
+  return attribute.replace(/[_\[]/g, ' ').replace(/]/g, '');
+}
+
+module.exports = {
+  replacements: replacements,
+  formatter: formatter
+};
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'Das :attribute Feld muss akzeptiert werden.',
+  after: 'Das :attribute muss ein Datum nach dem :after sein.',
+  after_or_equal: 'Das :attribute Datum muss kleiner oder gleich dem :after_or_equal sein.',
+  alpha: 'Das :attribute Feld darf nur aus Buchstaben bestehen.',
+  alpha_dash: 'Das :attribute Feld darf nur aus Buchstaben, Zahlen, Binde- und Unterstrichen bestehen.',
+  alpha_num: 'Das :attribute Feld darf nur aus Buchstaben und Zahlen bestehen.',
+  before: 'Das :attribute muss ein Datum vor dem :before sein.',
+  before_or_equal: 'Das :attribute Datum muss größer oder gleich dem :before_or_equal sein.',
+  between: 'Das :attribute Feld muss zwischen :min und :max liegen.',
+  confirmed: 'Das :attribute Feld stimmt nicht mit der Bestätigung überein.',
+  email: 'Das :attribute Format ist ungültig.',
+  date: 'Das :attribute Feld muss ein gültiges Datum sein.',
+  def: 'Das :attribute Feld hat Fehler.',
+  digits: 'Das :attribute Feld muss :digits Stellen haben.',
+  different: 'Die Felder :attribute und :different müssen sich unterscheiden.',
+  'in': 'Der gewählte Wert für :attribute ist ungültig.',
+  integer: 'Das :attribute Feld muss eine ganze Zahl sein.',
+  min: {
+    numeric: 'Das :attribute Feld muss mindestens :min sein.',
+    string: 'Das :attribute Feld muss mindestens :min Zeichen lang sein.'
+  },
+  max: {
+    numeric: 'Das :attribute Feld darf maximal :max sein.',
+    string: 'Das :attribute Feld darf maximal :max Zeichen haben.'
+  },
+  not_in: 'Der gewählte Wert für :attribute ist ungültig.',
+  numeric: 'Das :attribute Feld muss eine Zahl sein.',
+  present: 'Das Feld :attribute muss vorhanden sein (kann aber leer sein).',
+  required: 'Das :attribute Feld muss ausgefüllt sein.',
+  required_if: 'Das :attribute Feld muss ausgefüllt sein, wenn :other :value ist.',
+  same: 'Die Felder :attribute und :same müssen übereinstimmen.',
+  size: {
+    numeric: 'Das :attribute Feld muss gleich :size sein.',
+    string: 'Das :attribute Feld muss :size Zeichen lang sein.'
+  },
+  string: 'Das :attribute Feld muss ein Satz sein.',
+  url: 'Das Format von :attribute ist ungültig.',
+  regex: 'Das :attribute Format ist ungültig.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'Το πεδίο :attribute πρέπει να γίνει αποδεκτό.',
+  after: 'Το πεδίο :attribute πρέπει να είναι μία ημερομηνία μετά από :after.',
+  alpha: 'Το πεδίο :attribute μπορεί να περιέχει μόνο γράμματα.',
+  alpha_dash: 'Το πεδίο :attribute μπορεί να περιέχει μόνο γράμματα, αριθμούς, και παύλες.',
+  alpha_num: 'Το πεδίο :attribute μπορεί να περιέχει μόνο γράμματα και αριθμούς.',
+  between: 'Το πεδίο :attribute πρέπει να είναι μεταξύ :min και :max.',
+  confirmed: 'Η επιβεβαίωση του :attribute δεν ταιριάζει.',
+  email: 'Το πεδίο :attribute πρέπει να είναι μία έγκυρη διεύθυνση email.',
+  date: 'Το πεδίο :attribute δεν είναι έγκυρη ημερομηνία.',
+  def: 'Το πεδίο :attribute περιέχει σφάλματα.',
+  digits: 'Το πεδίο :attribute πρέπει να είναι :digits ψηφία.',
+  different: 'Το πεδίο :attribute  και :different πρέπει να είναι διαφορετικά.',
+  'in': 'Το επιλεγμένο :attribute δεν είναι έγκυρο.',
+  integer: 'Το πεδίο :attribute πρέπει να είναι ακέραιος.',
+  min: {
+    numeric: 'Το πεδίο :attribute πρέπει να είναι τουλάχιστον :min.',
+    string: 'Το πεδίο :attribute πρέπει να έχει τουλάχιστον :min χαρακτήρες.'
+  },
+  max: {
+    numeric: 'Το πεδίο :attribute δεν μπορεί να είναι μεγαλύτερο από :max.',
+    string: 'Το πεδίο :attribute δεν μπορεί να έχει περισσότερους από :max χαρακτήρες.'
+  },
+  not_in: 'Το επιλεγμένο :attribute δεν είναι αποδεκτό.',
+  numeric: 'Το πεδίο :attribute πρέπει να είναι αριθμός.',
+  present: 'The :attribute field must be present (but can be empty).',
+  required: 'Το πεδίο :attribute είναι απαραίτητο.',
+  required_if: 'Το πεδίο :attribute είναι απαραίτητο όταν το πεδίο :other είναι :value.',
+  same: 'Τα πεδία :attribute και :same πρέπει να είναι ίδια.',
+  size: {
+    numeric: 'Το πεδίο :attribute πρέπει να είναι :size.',
+    string: 'Το πεδίο :attribute πρέπει να είναι :size χαρακτήρες.'
+  },
+  string: 'Το πεδίο :attribute πρέπει να είναι αλφαριθμητικό.',
+  url: 'Το πεδίο :attribute δεν είναι έγκυρη διεύθυνση URL.',
+  regex: 'Η μορφή του :attribute δεν είναι αποδεκτή.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'El campo :attribute debe ser aceptado.',
+  after: 'El campo :attribute debe ser una fecha posterior a :after.',
+  alpha: 'El campo :attribute solo debe contener letras.',
+  alpha_dash: 'El campo :attribute solo debe contener letras, números y guiones.',
+  alpha_num: 'El campo :attribute solo debe contener letras y números.',
+  attributes: {},
+  between: 'El campo :attribute tiene que estar entre :min - :max.',
+  confirmed: 'La confirmación de :attribute no coincide.',
+  different: 'El campo :attribute y :other deben ser diferentes.',
+  digits: 'El campo :attribute debe tener :digits dígitos.',
+  email: 'El campo :attribute no es un correo válido.',
+  'in': 'El campo :attribute es inválido.',
+  integer: 'El campo :attribute debe ser un número entero.',
+  max: {
+    numeric: 'El campo :attribute no debe ser mayor a :max.',
+    string: 'El campo :attribute no debe ser mayor que :max caracteres.'
+  },
+  min: {
+    numeric: 'El tamaño del campo :attribute debe ser de al menos :min.',
+    string: 'El campo :attribute debe contener al menos :min caracteres.'
+  },
+  not_in: 'El campo :attribute es inválido.',
+  numeric: 'El campo :attribute debe ser numérico.',
+  present: 'El campo de :attribute debe estar presente (pero puede estar vacío).',
+  regex: 'El formato del campo :attribute es inválido.',
+  required: 'El campo :attribute es obligatorio.',
+  required_if: 'El campo :attribute es obligatorio cuando :other es :value.',
+  same: 'El campo :attribute y :other deben coincidir.',
+  size: {
+    numeric: 'El tamaño del campo :attribute debe ser :size.',
+    string: 'El campo :attribute debe contener :size caracteres.'
+  },
+  url: 'El formato de :attribute es inválido.'
+};
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'فیلد :attribute می بایست تایید شود',
+  alpha: 'فیلد :attribute می بایست فقط شامل حروف انگلیسی باشد',
+  alpha_dash: 'فیلد :attribute می بایست فقط شامل حروف انگلیسی و خط تیره و زیرخط باشد',
+  alpha_num: 'فیلد :attribute می بایست فقط شامل حروف و اعداد باشد',
+  between: 'فیلد :attribute می بایست بزرگتر از :min و کوچکتر از :max باشد',
+  confirmed: 'تطبیق فیلد :attribute صحیح نمی باشد',
+  email: 'فرمت ایمیل وارد شده در :attribute صحیح نمی‌باشد',
+  date: 'تاریخ درج شده در فیلد :attribute صحیح نیست',
+  def: 'فیلد :attribute اشکال دارد',
+  digits: 'فیلد :attribute می بایست شامل :digits رقم باشد',
+  different: 'فیلد :attribute می بایست مقداری غیر از :different داشته باشد',
+  'in': 'فیلد :attribute انتخاب شده صحیح نمی باشد',
+  integer: 'فیلد :attribute می بایست عددی باشد',
+  min: {
+    numeric: 'فیلد :attribute می بایست از :min بزرگتر باشد',
+    string: 'فیلد :attribute بایستی حداقل :min کاراکتر طول داشته باشد'
+  },
+  max: {
+    numeric: 'فیلد :attribute می بایست از :max کوچکتر باشد',
+    string: 'فیلد :attribute نباید بیشتر از :max کاراکتر طول داشته باشد'
+  },
+  not_in: 'فیلد :attribute انتخاب شده صحیح نمی باشد',
+  numeric: 'فیلد :attribute می بایست عددی باشد',
+  present: 'The :attribute field must be present (but can be empty).',
+  required: 'فیلد :attribute الزامی است',
+  required_if: 'در صورت دادن :value به :other تکمیل فیلد :attribute الزامی است',
+  same: 'فیلد :attribute می بایست با فیلد :same یکی باشد',
+  size: {
+    numeric: 'فیلد :attribute می بایست :size باشد',
+    string: 'فیلد :attribute می بایست :size کاراکتر طول داشته باشد'
+  },
+  string: 'فیلد :attribute می بایست متنی باشد',
+  url: 'آدرس فیلد :attribute صحیح نمی باشد',
+  regex: 'فرمت آدرس :attribute صحیح نمی باشد',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'Le champ :attribute doit être accepté.',
+  alpha: 'Le champ :attribute ne peut contenir que des caractères alphabétiques.',
+  alpha_dash: 'Le champ :attribute ne peut contenir que des caractères alphanumériques, des tirets et des underscores.',
+  alpha_num: 'Le champ :attribute ne peut contenir que des caractères alphanumériques.',
+  between: 'La longueur du champ :attribute doit être comprise entre :min and :max.',
+  confirmed: 'Le champ :attribute n\'est pas confirmé.',
+  email: 'Le champ :attribute contient un format invalide.',
+  def: 'Le champ :attribute contient un attribut erroné.',
+  digits: 'Le champ :attribute doit être composé de :digits chiffres.',
+  different: 'Les champs :attribute et :different doivent être différents.',
+  'in': 'Le champ :attribute est invalide.',
+  integer: 'Le champ :attribute doit être un entier.',
+  min: {
+    numeric: 'Le champ :attribute doit être supérieur à :min.',
+    string: 'Le champ :attribute doit contenir plus de :min caractères.'
+  },
+  max: {
+    numeric: 'Le champ :attribute doit être inférieur à :max.',
+    string: 'Le champ :attribute doit contenir moins de :max caractères.'
+  },
+  not_in: 'Le champ :attribute est invalide.',
+  numeric: 'Le champ :attribute doit être un chiffre.',
+  present: 'Le champ :attribute doit être présent (mais peut être vide).',
+  required: 'Le champ :attribute est requis.',
+  required_if: 'Le champ :attribute est requis quand :other est :value.',
+  same: 'Les champs :attribute et :same doivent correspondre.',
+  size: {
+    numeric: 'Le champ :attribute doit être égal à :size.',
+    string: 'Le champ :attribute doit contenir :size caractères.'
+  },
+  url: 'Le format du champ :attribute est invalide.',
+  regex: 'Le format du champ :attribute est invalide.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'Il campo :attribute deve essere accettato.',
+  alpha: 'Il campo :attribute deve contenere sono caratteri alfabetici.',
+  alpha_dash: 'Il campo :attribute può contenere solo caratteri alfanumerici oltre a trattini e trattini bassi.',
+  alpha_num: 'Il campo :attribute deve essere alfanumerico.',
+  between: 'Il campo :attribute deve essere compreso tra :min e :max.',
+  confirmed: 'Il campo conferma :attribute non è uguale.',
+  email: 'Il formato dell\'attributo :attribute non è valido.',
+  def: 'Gli attributi del campo :attribute contengono degli errori.',
+  digits: 'Il campo :attribute deve essere di :digits cifre.',
+  different: 'Il campo :attribute e :different devo essere diversi.',
+  'in': 'Il valore del campo :attribute non è valido.',
+  integer: 'Il campo :attribute deve essere un valore intero.',
+  min: {
+    numeric: 'Il campo :attribute deve essere maggiore o uguale di :min.',
+    string: 'Il campo :attribute deve essere composto da almeno :min caratteri.'
+  },
+  max: {
+    numeric: 'Il campo :attribute deve essere minore o uguale di :max.',
+    string: 'Il campo :attribute deve essere composto da massimo :max caratteri.'
+  },
+  not_in: 'Il campo :attribute non è valido.',
+  numeric: 'Il campo :attribute deve essere un numero.',
+  present: 'Il campo :attribute deve essere presente (ma può essere vuoto).',
+  required: 'Il campo :attribute è richiesto.',
+  required_if: 'Il campo :attribute è richiesto quando il campo :other è uguale a :value.',
+  same: 'I campi :attribute e :same devono essere uguali.',
+  size: {
+    numeric: 'La dimensione del campo :attribute deve essere uguale a :size.',
+    string: 'Il campo :attribute deve essere di :size caratteri.'
+  },
+  string: 'Il campo :attribute deve essere una stringa.',
+  url: 'Il formato del campo :attribute non è valido.',
+  regex: 'Il formato del campo :attribute non è valido.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    accepted: ':attributeを確認してください。',
+    alpha: ':attributeは英字のみで入力してください。',
+    alpha_dash: ':attributeは英字とダッシュと下線のみで入力してください。',
+    alpha_num: ':attributeは英数字のみで入力してください。',
+    between: ':attributeは:min〜:max文字で入力してください。',
+    confirmed: ':attributeは確認が一致しません。',
+    email: ':attributeは正しいメールアドレスを入力してください。',
+    date: ':attributeは正しい日付形式を入力してください',
+    def: ':attributeは検証エラーが含まれています。',
+    digits: ':attributeは:digitsの数字のみで入力してください。',
+    different: ':attributeと:differentは同じであってはなりません。',
+    'in': '選択された:attributeは無効です。',
+    integer: ':attributeは整数で入力してください。',
+    min        : {
+        numeric : ":attributeは:min以上で入力してください。",
+        string  : ":attributeは:min文字以上で入力してください。"
+    },
+    max : {
+        numeric : ":attributeは:max以下で入力してください。",
+        string  : ":attributeは:max文字以下で入力してください。"
+    },
+    not_in      : "選択された:attributeは無効です。",
+    numeric     : ":attributeは数値で入力してください。",
+    present: 'The :attribute field must be present (but can be empty).',
+    required    : ":attributeは必須です。",
+    required_if : ":otherは:valueになったら:attributeは必須です。",
+    same        : ":attributeと:sameは同じでなければなりません。",
+    size        : {
+        numeric : ":attributeは:sizeを入力してください。",
+        string  : ":attributeは:size文字で入力してください。"
+    },
+    url        : ":attributeは正しいURIを入力してください。",
+    regex      : ":attributeの値 \":value\" はパターンにマッチする必要があります。",
+    attributes : {}
+};
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: ':attribute må være akseptert.',
+  alpha: ':attribute feltet kan kun inneholde alfabetiske tegn.',
+  alpha_dash: ':attribute feltet kan kun inneholde alfanumeriske tegn, i tillegg til bindestreker og understreker.',
+  alpha_num: ':attribute feltet må være alfanumerisk.',
+  between: ':attribute feltet må være mellom :min og :max.',
+  confirmed: ':attribute feltet stemmer ikke overens med bekreftelsen.',
+  email: ':attribute formatet er ugyldig.',
+  date: ':attribute er et ugyldig datoformat.',
+  def: ':attribute attributtet har feil.',
+  digits: ':attribute må være på :digits siffer.',
+  different: ':attribute og :different må være forskjellige.',
+  'in': 'Den oppgitte verdien for :attribute er ugyldig.',
+  integer: ':attribute må være et heltall.',
+  min: {
+    numeric: ':attribute må minst være :min.',
+    string: ':attribute må være på minst :min tegn.'
+  },
+  max: {
+    numeric: ':attribute kan ikke være større enn :max.',
+    string: ':attribute kan maks ha :max tegn.'
+  },
+  'not_in': 'Den oppgitte verdien for :attribute er ugyldig.',
+  numeric: ':attribute må være et tall.',
+  present: 'The :attribute field must be present (but can be empty).',
+  required: ':attribute feltet er påkrevd.',
+  required_if: ':attribute er påkrevd når :other er :value.',
+  same: ':attribute og :same må være like.',
+  size: {
+    numeric: ':attribute må ha størrelsen :size.',
+    string: ':attribute må ha :size tegn.'
+  },
+  string: ':attribute må være tekst.',
+  url: ':attribute formatet er ugyldig.',
+  regex: ':attribute formatet er ugyldig.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'Het :attribute veld moet geaccepteerd worden.',
+  after: ':attribute moet een datum na :after zijn.',
+  after_or_equal: 'De :attribute datum moet op of na :after_or_equal zijn.',
+  alpha: 'Het :attribute veld mag alleen maar letters bevatten.',
+  alpha_dash: 'Het :attribute veld mag alleen maar letters, cijfers en (liggende) streepjes bevatten.',
+  alpha_num: 'Het :attribute veld mag alleen maar letters en cijfers bevatten.',
+  before: ':attribute moet vòòr :before zijn.',
+  before_or_equal: ':attribute moet vòòr of op :before_or_equal zijn.',
+  between: 'Het :attribute veld moet tussen :min en :max liggen.',
+  confirmed: 'Het :attribute veld komt niet met de bevestiging overeen.',
+  email: 'Het :attribute formaat is ongeldig.',
+  date: 'Het :attribute veld moet een geldige datum zijn.',
+  def: 'Het :attribute veld bevat fouten.',
+  digits: 'Het :attribute veld moet :digits cijfers hebben.',
+  different: 'Het :attribute en :different veld moeten verschillend zijn.',
+  'in': 'De gekozen waarde voor :attribute is ongeldig.',
+  integer: 'Het :attribute veld moet een geheel getal zijn.',
+  min: {
+    numeric: 'Het :attribute veld moet minstens :min zijn.',
+    string: 'Het :attribute veld moet minstens :min karakters bevatten.'
+  },
+  max: {
+    numeric: 'Het :attribute veld mag maximaal :max zijn.',
+    string: 'Het :attribute veld mag niet meer dan :max karakters bevatten.'
+  },
+  not_in: 'De gekozen waarde voor :attribute is ongeldig.',
+  numeric: 'Het :attribute veld moet een getal zijn.',
+  present: 'Het :attribute veld moet aanwezig zijn (maar mag leeg zijn).',
+  required: 'Het :attribute veld moet ingevuld zijn.',
+  required_if: 'Het :attribute veld moet ingevuld zijn, wanneer :other :value is.',
+  required_unless: 'Het :attribute veld moet ingevuld zijn, wanneer :other niet :value is.',
+  required_with: 'Het :attribute veld moet ingevuld zijn, wanneer :field niet leeg is.',
+  required_with_all: 'Het :attribute veld moet ingevuld zijn, wanneer :fields niet leeg zijn.',
+  required_without: 'Het :attribute veld moet ingevuld zijn, wanneer :field leeg is.',
+  required_without_all: 'Het :attribute veld moet ingevuld zijn, wanneer :fields leeg zijn.',
+  same: 'De :attribute en :same velden moeten overeenkomen.',
+  size: {
+    numeric: 'Het :attribute veld moet :size zijn.',
+    string: 'Het :attribute veld moet :size karakters bevatten.'
+  },
+  string: 'Het :attribute veld moet een woord of zin zijn.',
+  url: 'Het :attribute veld heeft een ongeldig formaat.',
+  regex: 'Het :attribute veld heeft een ongeldig formaat.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    accepted: 'Pole :attribute musi być zaakceptowane.',
+    alpha: 'Pole :attribute może zawierać tylko litery.',
+    alpha_dash: 'Pole :attribute moze zawierać tylko litery, myślnik i podrkeślenie.',
+    alpha_num: 'Pole :attribute moze zawierac tylko znaki alfanumeryczne.',
+    between: 'Pole :attribute musi mieć długość od :min do :max.',
+    confirmed: 'Pole :attribute nie spełnia warunku potwierdzenia.',
+    email: 'Pole :attribute ma niepoprawny format adresu email.',
+    date: 'Pole :attribute musi mieć poprawny format daty.',
+    def: 'Pole :attribute zawiera błędy.',
+    digits: 'Pole :attribute może zawierać tylko cyfry ze zbioru :digits.',
+    different: 'Pola :attribute i :different muszą się różnić.',
+    'in': 'Pole :attribute musi należeć do zbioru :in.',
+    integer: 'Pole :attribute musi być liczbą całkowitą.',
+    min: {
+        numeric: 'Pole :attribute musi być równe conajmniej :min.',
+        string: 'Pole :attribute musi zawierać conajmniej :min znaków.'
+    },
+    max: {
+        numeric: 'Pole :attribute nie moze być większe :max.',
+        string: 'Pole :attribute nie moze być dłuższe niż :max znaków.'
+    },
+    not_in: 'Pole :attribute nie może należeć do zbioru :not_in.',
+    numeric: 'Pole :attribute musi być liczbą.',
+    present: 'Polu :attribute musi być obecny (ale może być pusta).',
+    required: 'Pole :attribute jest wymagane.',
+    required_if: 'Pole :attribute jest wymagane jeśli pole :other jest równe :value.',
+    same: 'Pola :attribute i :same muszą być takie same.',
+    size: {
+        numeric: 'Pole :attribute musi być równe :size.',
+        string: 'Pole :attribute musi zawierać :size znaków.'
+    },
+    string: 'Pole :attribute musi być ciągiem znaków.',
+    url: 'Pole :attribute musi być poprawnym adresem URL.',
+    regex: 'Pole :attribute nie spełnia warunku.',
+    attributes: {}
+};
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'O :attribute precisa ser aceito.',
+  alpha: 'O campo :attribute só pode conter letras.',
+  alpha_dash: 'O campo :attribute só pode conter letras, números, hífens e sublinha.',
+  alpha_num: 'O campo :attribute só pode conter letras e números.',
+  between: 'O campo :attribute precisa estar entre :min e :max.',
+  confirmed: 'A confirmação de :attribute não coincide.',
+  email: 'O formato de :attribute é inválido.',
+  date: 'O :attribute não é um formato de data válido',
+  def: 'O atributo :attribute contém erros.',
+  digits: 'O atributo :attribute precisa ter :digits dígitos.',
+  different: 'O :attribute e :different precisam ser diferentes.',
+  'in': 'O atributo selecionado :attribute é inválido.',
+  integer: 'O :attribute precisa ser um inteiro.',
+  min: {
+    numeric: 'O :attribute precisa ser no mínimo :min.',
+    string: 'O :attribute precisa ter no mínimo :min caracteres.'
+  },
+  max: {
+    numeric: 'O :attribute não pode ser maior que :max.',
+    string: 'O :attribute não pode ter mais que :max caracteres.'
+  },
+  not_in: 'O :attribute selecionado é inválido.',
+  numeric: 'O :attribute precisa ser um número.',
+  present: 'O campo :attribute deve estar presente (mas pode estar vazio).',
+  required: 'O campo :attribute é obrigatório.',
+  required_if: 'O campo :attribute é obrigatório quando :other é :value.',
+  same: 'Os campos :attribute e :same precisam ser iguais.',
+  size: {
+    numeric: 'O :attribute precisa ser :size.',
+    string: 'O :attribute precisa ter :size caracteres.'
+  },
+  string: 'O :attribute precisa ser uma palavra.',
+  url: 'O formato de :attribute é inválido.',
+  regex: 'O formato de :attribute é inválido.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: 'Вы должны принять :attribute.',
+  alpha: 'Поле :attribute может содержать только буквы.',
+  alpha_dash: 'Поле :attribute может содержать только буквы, цифры, дефисы и символы подчёркивания.',
+  alpha_num: 'Поле :attribute может содержать только буквы и цифры.',
+  between: 'Поле :attribute должно быть между :min и :max.',
+  confirmed: 'Поле :attribute не совпадает с подтверждением.',
+  email: 'Поле :attribute должно быть действительным электронным адресом.',
+  def: 'Поле :attribute содержит ошибки.',
+  digits: 'Длина цифрового поля :attribute должна быть :digits.',
+  different: 'Поля :attribute и :different должны различаться.',
+  'in': 'Выбранное значение для :attribute ошибочно.',
+  integer: 'Поле :attribute должно быть целым числом.',
+  min: {
+    numeric: 'Значение поля :attribute должно быть больше или равно :min.',
+    string: 'Количество символов в поле :attribute должно быть не менее :min.'
+  },
+  max: {
+    numeric: 'Значение поля :attribute должно быть меньше или равно :max.',
+    string: 'Количество символов в поле :attribute не может превышать :max.'
+  },
+  not_in: 'Выбранное значение для :attribute ошибочно.',
+  numeric: 'Поле :attribute должно быть числом.',
+  present: 'Поле :attribute должно присутствовать (но может быть пустым).',
+  required: 'Поле :attribute обязательно для заполнения.',
+  required_if: 'Поле :attribute требуется когда значения поля :other равно :value.',
+  same: 'Значение :attribute должно совпадать с :same.',
+  size: {
+    numeric: 'Значение поля :attribute должно быть равным :size.',
+    string: 'Количество символов в поле :attribute должно быть равно :size.'
+  },
+  url: 'Поле :attribute должно содержать валидный URL.',
+  regex: 'Неверный формат поля :attribute.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: ':attribute kabul edilmeli.',
+  alpha: ':attribute alanı sadece harflerden oluşabilir.',
+  alpha_dash: ':attribute alanı sadece alfa-nümerik, tire ve alt çizgi karakterlerden oluşabilir.',
+  alpha_num: ':attribute alanı alfa-nümerik olmalıdır.',
+  between: ':attribute alanı :min ile :max arasında olabilir.',
+  confirmed: ':attribute uyuşmuyor.',
+  email: ':attribute formatı geçersiz.',
+  date: ':attribute geöerli bir tarih alanı değil.',
+  def: ':attribute hatalar içeriyor.',
+  digits: ':attribute sadece rakamlardan oluşabilir.',
+  different: ':attribute ve :different farklı olmalı.',
+  'in': 'Seçilen :attribute geçerli değil.',
+  integer: ':attribute tam sayı olmalı.',
+  min: {
+    numeric: ':attribute en az :min olmalı.',
+    string: ':attribute en az :min karakter uzunluğunda olmalı.'
+  },
+  max: {
+    numeric: ':attribute en çok :max olabilir.',
+    string: ':attribute uzunluğu en çok :max karakter uzunluğunda olabilir.'
+  },
+  not_in: 'Seçilen :attribute geçerli değil.',
+  numeric: ':attribute sayı olmalı.',
+  present: ':attribute alanı bulunmalıdır (ancak boş olabilir).',
+  required: ':attribute alanı gerekli.',
+  required_if: ':attribute alanı :other alanı :value olduğunda gerekli.',
+  same: ':attribute ve :same aynı olmalı.',
+  size: {
+    numeric: ':attribute :size olmalı.',
+    string: ':attribute :size karakter uzunluğunda olmalı.'
+  },
+  string: ':attribute alfa-numerik olmalı.',
+  url: ':attribute formatı geçersiz.',
+  regex: ':attribute formatı geçersiz.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: ':attribute повиннен бути прийнятий.',
+  alpha: 'Поле :attribute може складатись тільки з літер.',
+  alpha_dash: 'Поле :attribute може складатись тільки з літер, чисел, дефісів та символів підкреслення.',
+  alpha_num: 'Поле :attribute може складатись тільки з літер та чисел.',
+  between: 'Значення поля :attribute повинно знаходитись між :min і :max.',
+  confirmed: 'Поле :attribute не співпадає з підтвердженням.',
+  email: 'Значення поля :attribute повинно бути існуючою електронною адресою.',
+  def: 'Поле :attribute містить помилки.',
+  digits: 'Довжина числового поля :attribute повинна бути :digits.',
+  different: 'Поля :attribute і :different повинні відрізнятись.',
+  'in': 'Обране значення для :attribute помилкове.',
+  integer: 'Значення поля :attribute повинно бути цілим числом.',
+  min: {
+    numeric: 'Значення поля :attribute повинно бути більшим або рівним :min.',
+    string: 'Кількість символів в полі :attribute повинна бути не менше :min.'
+  },
+  max: {
+    numeric: 'Значення поля :attribute повинно бути менше або рівне :max.',
+    string: 'Кількість символів в полі :attribute не може превищувати :max.'
+  },
+  not_in: 'Обране значення для :attribute помилкове.',
+  numeric: 'Значення поля :attribute повинно бути числом.',
+  present: 'Поле :attribute повинно бути присутнім (але може бути пустим).',
+  required: 'Поле :attribute обов\'язкове для заповнення.',
+  required_if: 'Поле :attribute потрібне у випадку коли значення поля :other рівне :value.',
+  same: 'Значеня поля :attribute повинно співпадати з :same.',
+  size: {
+    numeric: 'Значення поля :attribute повинно бути рівним :size.',
+    string: 'Кількість символів в полі :attribute повинна бути рівною :size.'
+  },
+  url: 'Поле :attribute повинне містити валідний URL.',
+  regex: 'Неправильний формат значення :attribute.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: ':attribute phải được chấp nhận.',
+  alpha: 'Trường :attribute phải là ký tự',
+  alpha_dash: ':attribute chỉ chấp nhận ký tự chữ cái, số, dấu gạch chéo và gạch dưới.',
+  alpha_num: ':attribute phải là ký tự chữ cái hoặc chữ số.',
+  between: ':attribute phải nằm trong khoảng :min và :max.',
+  confirmed: ':attribute xác nhận không trùng khớp.',
+  email: ':attribute không phải là email.',
+  date: ':attribute không phải là ngày hợp lệ',
+  def: 'Thuộc tính :attribute có lỗi.',
+  digits: ':attribute phải là số và có chiều dài bằng :digits.',
+  different: 'Giá trị của hai trường :attribute và :different phải khác nhau.',
+  'in': 'Giá trị được chọn của :attribute không hợp lệ.',
+  integer: ':attribute phải là số nguyên.',
+  min: {
+    numeric: ':attribute phải lớn hơn hoặc bằng :min.',
+    string: ':attribute phải có ít nhất :min ký tự.'
+  },
+  max: {
+    numeric: ':attribute phải nhỏ hơn hoặc bằng :max.',
+    string: ':attribute phải có ít hơn :max ký tự.'
+  },
+  not_in: 'Giá trị được chọn của trường :attribute không hợp lệ.',
+  numeric: ':attribute phải là số.',
+  present: 'Trường :attribute phải có mặt (nhưng có thể để trống).',
+  required: ':attribute bắt buộc nhập.',
+  required_if: ':attribute là bắt buộc khi :other có giá trị :value.',
+  same: 'Giá trị của :attribute và :same phải như nhau.',
+  size: {
+    numeric: ':attribute phải có chiều dài của bằng :size.',
+    string: 'Số ký tự của :attribute phải là :size ký tự.'
+  },
+  string: ':attribute không phải là một chuỗi',
+  url: ':attribute không phải là một Url hợp lệ.',
+  regex: ':attribute không đúng định dạng',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: ':attribute必须是可接受的.',
+  alpha: ':attribute只能包含字母.',
+  alpha_dash: ':attribute只能包含字母,连字符和下划线.',
+  alpha_num: ':attribute只能包含字母和数字.',
+  between: ':attribute的(大小,长度等)只能在:min和:max之间.',
+  confirmed: ':attribute确认不一致.',
+  email: ':attribute格式不正确.',
+  date: ':attribute日期格式错误.',
+  def: ':attribute属性错误.',
+  digits: ':attribute必须是:digits位小数.',
+  different: ':attribute和:different必须不同.',
+  'in': '选择的:attribute无效',
+  integer: ':attribute必须是一个整数.',
+  min: {
+    numeric: ':attribute不能小于:min.',
+    string: ':attribute长度不能小于:min.'
+  },
+  max: {
+    numeric: ':attribute不能大于:max.',
+    string: ':attribute长度不能大于:max.'
+  },
+  not_in: '所选的:attribute无效.',
+  numeric: ':attribute必须是一个数字.',
+  present: 'The :attribute field must be present (but can be empty).',
+  required: ':attribute不能为空.',
+  required_if: '当:other是:value时,:attribute不能为空.',
+  same: ':attribute和:same必须一致.',
+  size: {
+    numeric: ':attribute必须等于:size.',
+    string: ':attribute的长度必须等于:size.'
+  },
+  string: ':attribute必须是一个字符串.',
+  url: ':attribute格式不正确.',
+  regex: ':attribute格式不正确.',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+module.exports = {
+  accepted: ':attribute必須接受。',
+  alpha: ':attribute只能包含字母。',
+  alpha_dash: ':attribute只能包含字母，連字符和下划線。',
+  alpha_num: ':attribute只能包含字母和數字。',
+  between: ':attribute的值只能在:min和:max之間。',
+  confirmed: ':attribute與確認輸入不一致。',
+  email: ':attribute的格式錯誤。',
+  date: ':attribute的日期格式錯誤。',
+  def: ':attribute屬性錯誤。',
+  digits: ':attribute必須是:digits位小數。',
+  different: ':attribute和:different必須不同。',
+  'in': '選擇的:attribute無效',
+  integer: ':attribute必須是一個整數。',
+  min: {
+    numeric: ':attribute不能小於:min。',
+    string: ':attribute的長度不能小於:min.'
+  },
+  max: {
+    numeric: ':attribute不能大於:max。',
+    string: ':attribute的長度不能大於:max.'
+  },
+  not_in: '所選的:attribute無效。',
+  numeric: ':attribute必須是一個數字。',
+  present: 'The :attribute field must be present (but can be empty).',
+  required: ':attribute不能空白。',
+  required_if: '當:other是:value時,:attribute不能空白。',
+  same: ':attribute和:same必須一致。',
+  size: {
+    numeric: ':attribute必須等於:size。',
+    string: ':attribute的長度必須等於:size.'
+  },
+  string: ':attribute必須是一個字串。',
+  url: ':attribute格式不正確。',
+  regex: ':attribute格式不正確。',
+  attributes: {}
+};
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Location = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by qiyuzhao on 2018-02-02.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _validatorjs = __webpack_require__(0);
+
+var _validatorjs2 = _interopRequireDefault(_validatorjs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Location = function () {
+  function Location(location) {
+    _classCallCheck(this, Location);
+
+    if (typeof location === 'string') {
+      this.location = location;
+    } else if ((typeof location === 'undefined' ? 'undefined' : _typeof(location)) === 'object') {
+      var locationValidator = new _validatorjs2.default(location, {
+        lat: "required|numeric",
+        lng: "required|numeric"
+      });
+      if (locationValidator.fails()) {
+        console.error(this.constructor.name + ' validation failed:', locationValidator.errors);
+      } else {
+        this.location = location;
+      }
+    } else {
+      console.error('Location must be in String of address, or object of {lat: numeric, lng:numeric}');
+    }
+  }
+
+  _createClass(Location, [{
+    key: 'toString',
+    value: function toString() {
+      if (typeof this.location === 'string') {
+        return this.location;
+      } else {
+        return this.location.lat + ',' + this.location.lng;
+      }
+    }
+  }]);
+
+  return Location;
+}();
+
+exports.Location = Location;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Created by qiyuzhao on 2018-02-03.
+ */
+
+var Utility = function () {
+  function Utility() {
+    _classCallCheck(this, Utility);
+  }
+
+  _createClass(Utility, [{
+    key: 'cleanObject',
+
+
+    // remove null objects
+    value: function cleanObject(target) {
+      var result = void 0;
+      if (Array.isArray(target)) {
+        result = [];
+      } else {
+        result = {};
+      }
+      for (var i in target) {
+        if (target[i] === null || typeof target[i] === 'undefined') {
+          continue;
+        }if (Array.isArray(target[i])) {
+          result[i] = this.cleanObject(target[i]);
+        } else {
+          result[i] = target[i];
+        }
+      }
+      return result;
+    }
+  }]);
+
+  return Utility;
+}();
+
+exports.Utility = Utility;
+
+/***/ }),
 /* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GPath = exports.Location = exports.GMarker = exports.MapMaker = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _GMarker = __webpack_require__(23);
+
+var _GPath = __webpack_require__(30);
+
+var _Location = __webpack_require__(20);
+
+var _validatorjs = __webpack_require__(0);
+
+var _validatorjs2 = _interopRequireDefault(_validatorjs);
+
+var _Utility = __webpack_require__(21);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var MapMaker = function () {
+  function MapMaker(options, key, signature) {
+    _classCallCheck(this, MapMaker);
+
+    this.GSMapUrl = 'https://maps.googleapis.com/maps/api/staticmap?';
+    this.options = {
+      center: null,
+      zoom: null,
+      size: {
+        width: null,
+        height: null
+      },
+      scale: null,
+      format: null,
+      maptype: null,
+      language: null,
+      region: null,
+      paths: [],
+      visible: null,
+      style: null, // TODO
+      markers: []
+    };
+    this.auth = {
+      key: key,
+      signature: signature
+    };
+    // validate key and  signature
+    var validateKeyAndSignature = new _validatorjs2.default(this.auth, {
+      key: 'required|string',
+      signature: 'string'
+    });
+    if (validateKeyAndSignature.fails()) console.error(this.constructor.name + ' validation failed:', validateKeyAndSignature.errors);
+
+    this.setOptions(options);
+  }
+
+  _createClass(MapMaker, [{
+    key: 'toString',
+    value: function toString() {
+      var util = new _Utility.Utility();
+      var options = util.cleanObject(this.options);
+      var auth = util.cleanObject(this.auth);
+      var params = [];
+      // options
+      for (var i in options) {
+        switch (i) {
+          case 'center':
+            params.push(i + '=' + options[i].toString());
+            break;
+          case 'size':
+            params.push(i + '=' + options.size.width + 'x' + options.size.height);
+            break;
+          case 'paths':
+            for (var p in options.paths) {
+              params.push(options.paths[p].toString());
+            }
+            break;
+          case 'markers':
+            for (var m in options.markers) {
+              params.push(options.markers[m].toString());
+            }
+            break;
+          default:
+            params.push(i + '=' + options[i]);
+        }
+      }
+      // auth
+      for (var i in auth) {
+        params.push(i + '=' + auth[i]);
+      }
+      return encodeURI('' + this.GSMapUrl + params.join('&'));
+    }
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.options;
+    }
+  }, {
+    key: 'setOptions',
+    value: function setOptions(options) {
+      this.options = Object.assign(this.options, options);
+
+      // validate options
+      var validateOptions = new _validatorjs2.default(this.options, {
+        center: 'required_without:markers',
+        zoom: 'required_without:markers|min:0|max:21|integer',
+        size: {
+          width: 'required|integer',
+          height: 'required|integer'
+        },
+        scale: 'integer|in:1,2',
+        format: 'string|in:png8,png,png32,gif,jpg,jpg-baseline',
+        maptype: 'string|in:roadmap,satellite,hybrid,terrain',
+        language: 'string', // google locale codes: https://developers.google.com/maps/faq#languagesupport
+        region: 'type:string', // Unicode region subtag identifiers: //
+        // http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers
+        paths: 'array',
+        visible: 'array',
+        //style: null, // TODO
+        markers: 'required_without:center|array'
+      });
+
+      if (validateOptions.fails()) {
+        console.error(this.constructor.name + ' validation failed:', validateOptions.errors);
+      }
+    }
+  }, {
+    key: 'addGMarker',
+    value: function addGMarker(markerOptions) {
+      this.options.markers.push(new _GMarker.GMarker(markerOptions));
+    }
+  }, {
+    key: 'clearGMarker',
+    value: function clearGMarker() {
+      this.options.markers = [];
+    }
+  }, {
+    key: 'addGPath',
+    value: function addGPath(pathOptions) {
+      this.options.paths.push(new _GPath.GPath(pathOptions));
+    }
+  }, {
+    key: 'clearGPath',
+    value: function clearGPath() {
+      this.options.paths = [];
+    }
+  }]);
+
+  return MapMaker;
+}();
+
+exports.MapMaker = MapMaker;
+exports.GMarker = _GMarker.GMarker;
+exports.Location = _Location.Location;
+exports.GPath = _GPath.GPath;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GMarker = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by qiyuzhao on 2018-02-02.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _validatorjs = __webpack_require__(0);
+
+var _validatorjs2 = _interopRequireDefault(_validatorjs);
+
+var _Location = __webpack_require__(20);
+
+var _Utility = __webpack_require__(21);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var GMarker = function () {
+  function GMarker(options) {
+    _classCallCheck(this, GMarker);
+
+    this.options = {
+      icon: null, // Icons may be up to 4096 pixels maximum size (64x64 for square images).
+      anchor: null,
+      color: null,
+      label: null,
+      size: null, // size won't work with custom icon
+      locations: []
+    };
+    this.setOptions(options);
+  }
+
+  _createClass(GMarker, [{
+    key: 'toString',
+    value: function toString() {
+      //The set of markerStyles is declared at the beginning of the markers declaration and consists of zero or more style
+      // descriptors separated by the pipe character (|), followed by a set of one or more locations also separated by the
+      // pipe character (|).
+
+      var util = new _Utility.Utility();
+      var options = util.cleanObject(this.options);
+      var params = [];
+      for (var i in options) {
+        switch (i) {
+          case 'locations':
+            params.push(options[i].join('|'));
+            break;
+          case 'icon':
+            params.push(i + ':' + encodeURI(options[i].toString()));
+            break;
+          default:
+            params.push(i + ':' + options[i].toString());
+        }
+      }
+      return 'markers=' + params.join('|');
+    }
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.options;
+    }
+  }, {
+    key: 'setOptions',
+    value: function setOptions(options) {
+      this.options = Object.assign(this.options, options);
+
+      var validateMarker = new _validatorjs2.default(this.options, {
+        icon: 'string|required_with:anchor',
+        anchor: 'string|in:top,bottom,left,right,center,topleft,topright,bottomleft,bottomright',
+        color: 'string',
+        label: 'string',
+        size: 'string|in:normal,tiny,mid,small',
+        locations: 'required|array'
+      });
+
+      if (validateMarker.fails()) {
+        console.error(this.constructor.name + ' validation failed:', validateMarker.errors);
+      }
+    }
+  }]);
+
+  return GMarker;
+}();
+
+exports.GMarker = GMarker;
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports) {
 
 function leapYear(year) {
@@ -2511,12 +2751,12 @@ module.exports = manager;
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var require;var Messages = __webpack_require__(24);
+var require;var Messages = __webpack_require__(26);
 
-__webpack_require__(0);
+__webpack_require__(1);
 
 var require_method = require;
 
@@ -2561,7 +2801,7 @@ var container = {
   _load: function(lang) {
     if (!this.messages[lang]) {
       try {
-        var rawMessages = __webpack_require__(25)("./" + lang);
+        var rawMessages = __webpack_require__(27)("./" + lang);
         this._set(lang, rawMessages);
       } catch (e) {}
     }
@@ -2595,10 +2835,10 @@ module.exports = container;
 
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Attributes = __webpack_require__(1);
+var Attributes = __webpack_require__(2);
 
 var Messages = function(lang, messages) {
   this.lang = lang;
@@ -2753,46 +2993,46 @@ module.exports = Messages;
 
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./de": 2,
-	"./de.js": 2,
-	"./el": 3,
-	"./el.js": 3,
-	"./en": 0,
-	"./en.js": 0,
-	"./es": 4,
-	"./es.js": 4,
-	"./fa": 5,
-	"./fa.js": 5,
-	"./fr": 6,
-	"./fr.js": 6,
-	"./it": 7,
-	"./it.js": 7,
-	"./ja": 8,
-	"./ja.js": 8,
-	"./nb_NO": 9,
-	"./nb_NO.js": 9,
-	"./nl": 10,
-	"./nl.js": 10,
-	"./pl": 11,
-	"./pl.js": 11,
-	"./pt": 12,
-	"./pt.js": 12,
-	"./ru": 13,
-	"./ru.js": 13,
-	"./tr": 14,
-	"./tr.js": 14,
-	"./ua": 15,
-	"./ua.js": 15,
-	"./vi": 16,
-	"./vi.js": 16,
-	"./zh": 17,
-	"./zh.js": 17,
-	"./zh_TW": 18,
-	"./zh_TW.js": 18
+	"./de": 3,
+	"./de.js": 3,
+	"./el": 4,
+	"./el.js": 4,
+	"./en": 1,
+	"./en.js": 1,
+	"./es": 5,
+	"./es.js": 5,
+	"./fa": 6,
+	"./fa.js": 6,
+	"./fr": 7,
+	"./fr.js": 7,
+	"./it": 8,
+	"./it.js": 8,
+	"./ja": 9,
+	"./ja.js": 9,
+	"./nb_NO": 10,
+	"./nb_NO.js": 10,
+	"./nl": 11,
+	"./nl.js": 11,
+	"./pl": 12,
+	"./pl.js": 12,
+	"./pt": 13,
+	"./pt.js": 13,
+	"./ru": 14,
+	"./ru.js": 14,
+	"./tr": 15,
+	"./tr.js": 15,
+	"./ua": 16,
+	"./ua.js": 16,
+	"./vi": 17,
+	"./vi.js": 17,
+	"./zh": 18,
+	"./zh.js": 18,
+	"./zh_TW": 19,
+	"./zh_TW.js": 19
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -2808,10 +3048,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 25;
+webpackContext.id = 27;
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports) {
 
 var Errors = function() {
@@ -2894,7 +3134,7 @@ module.exports = Errors;
 
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports) {
 
 function AsyncResolvers(onFailedOne, onResolvedAll) {
@@ -2981,185 +3221,6 @@ module.exports = AsyncResolvers;
 
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.GChartMarker = exports.GMarker = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by qiyuzhao on 2018-02-02.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-var _validatorjs = __webpack_require__(21);
-
-var _validatorjs2 = _interopRequireDefault(_validatorjs);
-
-var _Location = __webpack_require__(29);
-
-var _Utility = __webpack_require__(30);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var GMarker = function () {
-  function GMarker(options) {
-    _classCallCheck(this, GMarker);
-
-    this.options = {
-      icon: null,
-      anchor: null,
-      color: null,
-      label: null,
-      size: null,
-      locations: []
-    };
-    this.setOptions(options);
-  }
-
-  _createClass(GMarker, [{
-    key: 'toString',
-    value: function toString() {
-      //The set of markerStyles is declared at the beginning of the markers declaration and consists of zero or more style
-      // descriptors separated by the pipe character (|), followed by a set of one or more locations also separated by the
-      // pipe character (|).
-
-      var util = new _Utility.Utility();
-      var options = util.cleanObject(this.options);
-      var params = [];
-      for (var i in options) {
-        switch (i) {
-          case 'locations':
-            params.push(options[i].join('|'));
-            break;
-          case 'icon':
-            params.push(i + ':' + encodeURI(options[i].toString()));
-            break;
-          default:
-            params.push(i + ':' + options[i].toString());
-        }
-      }
-      return 'markers=' + params.join('|');
-    }
-  }, {
-    key: 'getOptions',
-    value: function getOptions() {
-      return this.options;
-    }
-  }, {
-    key: 'setOptions',
-    value: function setOptions(options) {
-      this.options = Object.assign(this.options, options);
-
-      var validateMarker = new _validatorjs2.default(this.options, {
-        icon: 'string|required_with:anchor',
-        anchor: 'string|in:top,bottom,left,right,center,topleft,topright,bottomleft,bottomright',
-        color: 'string',
-        label: 'string',
-        size: 'string|in:normal,tiny,mid,small',
-        locations: 'required|array'
-      });
-
-      if (validateMarker.fails()) {
-        console.error('validation failed:', validateMarker.errors);
-      }
-    }
-  }]);
-
-  return GMarker;
-}();
-
-var GChartMarker = function (_GMarker) {
-  _inherits(GChartMarker, _GMarker);
-
-  function GChartMarker(options) {
-    _classCallCheck(this, GChartMarker);
-
-    return _possibleConstructorReturn(this, (GChartMarker.__proto__ || Object.getPrototypeOf(GChartMarker)).call(this, options));
-  }
-
-  return GChartMarker;
-}(GMarker);
-
-exports.GMarker = GMarker;
-exports.GChartMarker = GChartMarker;
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Location = undefined;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by qiyuzhao on 2018-02-02.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-var _validatorjs = __webpack_require__(21);
-
-var _validatorjs2 = _interopRequireDefault(_validatorjs);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Location = function () {
-  function Location(location) {
-    _classCallCheck(this, Location);
-
-    if (typeof location === 'string') {
-      this.location = location;
-    } else if ((typeof location === 'undefined' ? 'undefined' : _typeof(location)) === 'object') {
-      var locationValidator = new _validatorjs2.default(location, {
-        lat: "required|numeric",
-        lng: "required|numeric"
-      });
-      if (locationValidator.fails()) {
-        console.error('validation failed:', locationValidator.errors);
-      } else {
-        this.location = location;
-      }
-    } else {
-      console.error('Location must be in String of address, or object of {lat: numeric, lng:numeric}');
-    }
-  }
-
-  _createClass(Location, [{
-    key: 'toString',
-    value: function toString() {
-      if (typeof this.location === 'string') {
-        return this.location;
-      } else {
-        return this.location.lat + ',' + this.location.lng;
-      }
-    }
-  }]);
-
-  return Location;
-}();
-
-exports.Location = Location;
-
-/***/ }),
 /* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3167,51 +3228,95 @@ exports.Location = Location;
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
+exports.GPath = undefined;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by qiyuzhao on 2018-02-02.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+var _Utility = __webpack_require__(21);
+
+var _Location = __webpack_require__(20);
+
+var _validatorjs = __webpack_require__(0);
+
+var _validatorjs2 = _interopRequireDefault(_validatorjs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/**
- * Created by qiyuzhao on 2018-02-03.
- */
+var GPath = function () {
+    function GPath(options) {
+        _classCallCheck(this, GPath);
 
-var Utility = function () {
-  function Utility() {
-    _classCallCheck(this, Utility);
-  }
-
-  _createClass(Utility, [{
-    key: 'cleanObject',
-
-
-    // remove null objects
-    value: function cleanObject(target) {
-      var result = void 0;
-      if (Array.isArray(target)) {
-        result = [];
-      } else {
-        result = {};
-      }
-      for (var i in target) {
-        if (target[i] === null || typeof target[i] === 'undefined') {
-          continue;
-        }if (Array.isArray(target[i])) {
-          result[i] = this.cleanObject(target[i]);
-        } else {
-          result[i] = target[i];
-        }
-      }
-      return result;
+        this.options = {
+            weight: null,
+            color: null,
+            fillcolor: null,
+            geodesic: null,
+            locations: []
+        };
+        this.setOptions(options);
     }
-  }]);
 
-  return Utility;
+    _createClass(GPath, [{
+        key: 'toString',
+        value: function toString() {
+            var util = new _Utility.Utility();
+            var options = util.cleanObject(this.options);
+            var params = [];
+
+            for (var i in options) {
+                switch (i) {
+                    case 'locations':
+                        params.push(options[i].join('|'));
+                        break;
+                    case 'geodesic':
+                        if (this.options.geodesic === true) {
+                            params.push(i + ':true');
+                        } else if (this.options.geodesic === false) {
+                            params.push(i + ':false');
+                        }
+                        break;
+                    default:
+                        params.push(i + ':' + options[i].toString());
+                }
+            }
+            return 'path=' + params.join('|');
+        }
+    }, {
+        key: 'getOptions',
+        value: function getOptions() {
+            return this.options;
+        }
+    }, {
+        key: 'setOptions',
+        value: function setOptions(options) {
+            this.options = Object.assign(this.options, options);
+
+            //specifies a color either as a 24-bit (example: color=0xFFFFCC) or 32-bit hexadecimal value (example: color=0xFFFFCCFF),
+            // or from the set {black, brown, green, purple, yellow, blue, gray, orange, red, white}.
+            var validatePath = new _validatorjs2.default(this.options, {
+                weight: 'integer',
+                color: 'string',
+                fillcolor: 'string',
+                geodesic: 'boolean',
+                locations: 'required|array'
+            });
+
+            if (validatePath.fails()) {
+                console.error(this.constructor.name + ' validation failed:', validatePath.errors);
+            }
+        }
+    }]);
+
+    return GPath;
 }();
 
-exports.Utility = Utility;
+exports.GPath = GPath;
 
 /***/ })
 /******/ ]);

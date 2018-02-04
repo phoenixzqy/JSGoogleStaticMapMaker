@@ -8,11 +8,11 @@ import {Utility} from 'src/Utility/Utility';
 class GMarker {
   constructor(options:object) {
     this.options = {
-      icon: null,
+      icon: null, // Icons may be up to 4096 pixels maximum size (64x64 for square images).
       anchor: null,
       color: null,
       label: null,
-      size: null,
+      size: null, // size won't work with custom icon
       locations: []
     };
     this.setOptions(options);
@@ -59,16 +59,9 @@ class GMarker {
     });
 
     if (validateMarker.fails()) {
-      console.error('validation failed:', validateMarker.errors);
+      console.error(`${this.constructor.name} validation failed:`, validateMarker.errors);
     }
   }
-
 }
 
-class GChartMarker extends GMarker {
-  constructor(options:object) {
-    super(options);
-  }
-}
-
-export {GMarker, GChartMarker};
+export {GMarker};
