@@ -1,5 +1,5 @@
 import {GMarker} from 'src/GMarker';
-import {GPath} from 'src/GPath';
+import {GPath, GCirclePath} from 'src/GPath';
 import {Location} from 'src/Location';
 import Validator from  'validatorjs';
 import {Utility} from 'src/Utility/Utility';
@@ -20,7 +20,7 @@ class MapMaker {
       language: null,
       region: null,
       paths: [],
-      visible: null,
+      visible: [],
       style: null, // TODO
       markers: []
     };
@@ -62,6 +62,10 @@ class MapMaker {
           for (var m in options.markers) {
             params.push(options.markers[m].toString());
           }
+          break;
+        case 'visible':
+          if (options.visible.length > 0)
+            params.push(`${i}=${options.visible.join('|')}`)
           break;
         default:
           params.push(`${i}=${options[i]}`)
@@ -108,7 +112,7 @@ class MapMaker {
   }
 
   addGMarker(markerOptions) {
-      this.options.markers.push(new GMarker(markerOptions));
+    this.options.markers.push(new GMarker(markerOptions));
   }
 
   clearGMarker() {
@@ -125,4 +129,4 @@ class MapMaker {
 }
 
 
-export {MapMaker, GMarker, Location, GPath};
+export {MapMaker, GMarker, Location, GPath, GCirclePath};

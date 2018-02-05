@@ -27,7 +27,7 @@ class Location {
     if(typeof this.location === 'string') {
       return this.location;
     } else {
-      return `${this.location.lat},${this.location.lng}`;
+      return `${this.location.lat.toFixed(6)},${this.location.lng.toFixed(6)}`;
     }
   }
 }

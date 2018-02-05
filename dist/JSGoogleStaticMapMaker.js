@@ -1752,7 +1752,7 @@ var Location = function () {
       if (typeof this.location === 'string') {
         return this.location;
       } else {
-        return this.location.lat + ',' + this.location.lng;
+        return this.location.lat.toFixed(6) + ',' + this.location.lng.toFixed(6);
       }
     }
   }]);
@@ -1826,7 +1826,7 @@ exports.Utility = Utility;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GPath = exports.Location = exports.GMarker = exports.MapMaker = undefined;
+exports.GCirclePath = exports.GPath = exports.Location = exports.GMarker = exports.MapMaker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1864,7 +1864,7 @@ var MapMaker = function () {
       language: null,
       region: null,
       paths: [],
-      visible: null,
+      visible: [],
       style: null, // TODO
       markers: []
     };
@@ -1907,6 +1907,9 @@ var MapMaker = function () {
             for (var m in options.markers) {
               params.push(options.markers[m].toString());
             }
+            break;
+          case 'visible':
+            if (options.visible.length > 0) params.push(i + '=' + options.visible.join('|'));
             break;
           default:
             params.push(i + '=' + options[i]);
@@ -1981,6 +1984,7 @@ exports.MapMaker = MapMaker;
 exports.GMarker = _GMarker.GMarker;
 exports.Location = _Location.Location;
 exports.GPath = _GPath.GPath;
+exports.GCirclePath = _GPath.GCirclePath;
 
 /***/ }),
 /* 23 */
@@ -3228,9 +3232,9 @@ module.exports = AsyncResolvers;
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
-exports.GPath = undefined;
+exports.GCirclePath = exports.GPath = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Created by qiyuzhao on 2018-02-02.
@@ -3249,74 +3253,156 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var GPath = function () {
-    function GPath(options) {
-        _classCallCheck(this, GPath);
+  function GPath(options) {
+    _classCallCheck(this, GPath);
 
-        this.options = {
-            weight: null,
-            color: null,
-            fillcolor: null,
-            geodesic: null,
-            locations: []
-        };
-        this.setOptions(options);
+    this.options = {
+      weight: null,
+      color: null,
+      fillcolor: null,
+      geodesic: null,
+      locations: []
+    };
+    this.setOptions(options);
+  }
+
+  _createClass(GPath, [{
+    key: 'toString',
+    value: function toString() {
+      var util = new _Utility.Utility();
+      var options = util.cleanObject(this.options);
+      var params = [];
+
+      for (var i in options) {
+        switch (i) {
+          case 'locations':
+            params.push(options[i].join('|'));
+            break;
+          case 'geodesic':
+            if (this.options.geodesic === true) {
+              params.push(i + ':true');
+            } else if (this.options.geodesic === false) {
+              params.push(i + ':false');
+            }
+            break;
+          default:
+            params.push(i + ':' + options[i].toString());
+        }
+      }
+      return 'path=' + params.join('|');
     }
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.options;
+    }
+  }, {
+    key: 'setOptions',
+    value: function setOptions(options) {
+      this.options = Object.assign(this.options, options);
 
-    _createClass(GPath, [{
-        key: 'toString',
-        value: function toString() {
-            var util = new _Utility.Utility();
-            var options = util.cleanObject(this.options);
-            var params = [];
+      //specifies a color either as a 24-bit (example: color=0xFFFFCC) or 32-bit hexadecimal value (example: color=0xFFFFCCFF),
+      // or from the set {black, brown, green, purple, yellow, blue, gray, orange, red, white}.
+      var validatePath = new _validatorjs2.default(this.options, {
+        weight: 'integer',
+        color: 'string',
+        fillcolor: 'string',
+        geodesic: 'boolean',
+        locations: 'required|array'
+      });
 
-            for (var i in options) {
-                switch (i) {
-                    case 'locations':
-                        params.push(options[i].join('|'));
-                        break;
-                    case 'geodesic':
-                        if (this.options.geodesic === true) {
-                            params.push(i + ':true');
-                        } else if (this.options.geodesic === false) {
-                            params.push(i + ':false');
-                        }
-                        break;
-                    default:
-                        params.push(i + ':' + options[i].toString());
-                }
-            }
-            return 'path=' + params.join('|');
-        }
-    }, {
-        key: 'getOptions',
-        value: function getOptions() {
-            return this.options;
-        }
-    }, {
-        key: 'setOptions',
-        value: function setOptions(options) {
-            this.options = Object.assign(this.options, options);
+      if (validatePath.fails()) {
+        console.error(this.constructor.name + ' validation failed:', validatePath.errors);
+      }
+    }
+  }, {
+    key: 'addLocations',
+    value: function addLocations(location) {
+      this.options.locations.push(location);
+    }
+  }, {
+    key: 'clearLocations',
+    value: function clearLocations() {
+      this.options.locations = [];
+    }
+  }]);
 
-            //specifies a color either as a 24-bit (example: color=0xFFFFCC) or 32-bit hexadecimal value (example: color=0xFFFFCCFF),
-            // or from the set {black, brown, green, purple, yellow, blue, gray, orange, red, white}.
-            var validatePath = new _validatorjs2.default(this.options, {
-                weight: 'integer',
-                color: 'string',
-                fillcolor: 'string',
-                geodesic: 'boolean',
-                locations: 'required|array'
-            });
+  return GPath;
+}();
 
-            if (validatePath.fails()) {
-                console.error(this.constructor.name + ' validation failed:', validatePath.errors);
-            }
-        }
-    }]);
+var GCirclePath = function () {
+  function GCirclePath(options) {
+    _classCallCheck(this, GCirclePath);
 
-    return GPath;
+    this.options = {
+      location: null,
+      weight: null,
+      color: null,
+      fillcolor: null,
+      geodesic: null,
+      radius: null,
+      detail: 8
+    };
+    this.setOptions(options);
+  }
+
+  _createClass(GCirclePath, [{
+    key: 'toString',
+    value: function toString() {
+      var locations = [];
+      var lat = this.options.location.location.lat * Math.PI / 180;
+      var lng = this.options.location.location.lng * Math.PI / 180;
+      var dimension = this.options.radius / 1000 / 6371;
+
+      for (var i = 0; i <= 365; i += this.options.detail) {
+        var angle = i * Math.PI / 180;
+        var tempLat = Math.asin(Math.sin(lat) * Math.cos(dimension) + Math.cos(lat) * Math.sin(dimension) * Math.cos(angle));
+        var tempLng = (lng + Math.atan2(Math.sin(angle) * Math.sin(dimension) * Math.cos(lat), Math.cos(dimension) - Math.sin(lat) * Math.sin(tempLat))) * 180 / Math.PI;
+        tempLat = tempLat * 180 / Math.PI;
+        locations.push(new _Location.Location({ lat: tempLat, lng: tempLng }));
+      }
+      var myPath = new GPath({
+        weight: this.options.weight,
+        color: this.options.color,
+        fillcolor: this.options.fillcolor,
+        geodesic: this.options.geodesic,
+        locations: locations
+      });
+      return myPath.toString();
+    }
+  }, {
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.options;
+    }
+  }, {
+    key: 'setOptions',
+    value: function setOptions(options) {
+      this.options = Object.assign(this.options, options);
+
+      //specifies a color either as a 24-bit (example: color=0xFFFFCC) or 32-bit hexadecimal value (example: color=0xFFFFCCFF),
+      // or from the set {black, brown, green, purple, yellow, blue, gray, orange, red, white}.
+      var validatePath = new _validatorjs2.default(this.options, {
+        location: 'required', // suppose to be a Location object
+        weight: 'integer',
+        color: 'string',
+        fillcolor: 'string',
+        geodesic: 'boolean',
+        radius: 'numeric|required', // unit of meters
+        detail: 'integer|min:8|max:20'
+      });
+
+      if (validatePath.fails()) {
+        console.error(this.constructor.name + ' validation failed:', validatePath.errors);
+      }
+    }
+  }]);
+
+  return GCirclePath;
 }();
 
 exports.GPath = GPath;
+exports.GCirclePath = GCirclePath;
 
 /***/ })
 /******/ ]);
