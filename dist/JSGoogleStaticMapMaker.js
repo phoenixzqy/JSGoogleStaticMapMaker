@@ -71,7 +71,7 @@ var GSMMaker =
 var Rules = __webpack_require__(24);
 var Lang = __webpack_require__(25);
 var Errors = __webpack_require__(28);
-var Attributes = __webpack_require__(2);
+var Attributes = __webpack_require__(4);
 var AsyncResolvers = __webpack_require__(29);
 
 var Validator = function (input, rules, customMessages) {
@@ -775,6 +775,129 @@ module.exports = {
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Location = undefined;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by qiyuzhao on 2018-02-02.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _validatorjs = __webpack_require__(0);
+
+var _validatorjs2 = _interopRequireDefault(_validatorjs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Location = function () {
+  function Location(location) {
+    _classCallCheck(this, Location);
+
+    if (typeof location === 'string') {
+      this.location = location;
+    } else if ((typeof location === 'undefined' ? 'undefined' : _typeof(location)) === 'object') {
+      var locationValidator = new _validatorjs2.default(location, {
+        lat: "required|numeric",
+        lng: "required|numeric"
+      });
+      if (locationValidator.fails()) {
+        console.error(this.constructor.name + ' validation failed:', locationValidator.errors);
+      } else {
+        this.location = location;
+      }
+    } else {
+      console.error('Location must be in String of address, or object of {lat: numeric, lng:numeric}');
+    }
+  }
+
+  _createClass(Location, [{
+    key: 'toString',
+    value: function toString() {
+      if (typeof this.location === 'string') {
+        return this.location;
+      } else {
+        return this.location.lat.toFixed(5) + ',' + this.location.lng.toFixed(5);
+      }
+    }
+  }, {
+    key: 'toArray',
+    value: function toArray() {
+      return [this.location.lat, this.location.lng];
+    }
+  }]);
+
+  return Location;
+}();
+
+exports.Location = Location;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Created by qiyuzhao on 2018-02-03.
+ */
+
+var Utility = function () {
+  function Utility() {
+    _classCallCheck(this, Utility);
+  }
+
+  _createClass(Utility, [{
+    key: 'cleanObject',
+
+
+    // remove null objects
+    value: function cleanObject(target) {
+      var result = void 0;
+      if (Array.isArray(target)) {
+        result = [];
+      } else {
+        result = {};
+      }
+      for (var i in target) {
+        if (target[i] === null || typeof target[i] === 'undefined') {
+          continue;
+        }if (Array.isArray(target[i])) {
+          result[i] = this.cleanObject(target[i]);
+        } else {
+          result[i] = target[i];
+        }
+      }
+      return result;
+    }
+  }]);
+
+  return Utility;
+}();
+
+exports.Utility = Utility;
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 var replacements = {
@@ -964,7 +1087,7 @@ module.exports = {
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1011,7 +1134,7 @@ module.exports = {
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1055,7 +1178,7 @@ module.exports = {
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1096,7 +1219,7 @@ module.exports = {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1139,7 +1262,7 @@ module.exports = {
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1180,7 +1303,7 @@ module.exports = {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1222,7 +1345,7 @@ module.exports = {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1264,7 +1387,7 @@ module.exports = {
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1307,7 +1430,7 @@ module.exports = {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1359,7 +1482,7 @@ module.exports = {
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1402,7 +1525,7 @@ module.exports = {
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1445,7 +1568,7 @@ module.exports = {
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1486,7 +1609,7 @@ module.exports = {
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1529,7 +1652,7 @@ module.exports = {
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1570,7 +1693,7 @@ module.exports = {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1613,7 +1736,7 @@ module.exports = {
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1656,7 +1779,7 @@ module.exports = {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -1699,124 +1822,6 @@ module.exports = {
 
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Location = undefined;
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by qiyuzhao on 2018-02-02.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-var _validatorjs = __webpack_require__(0);
-
-var _validatorjs2 = _interopRequireDefault(_validatorjs);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Location = function () {
-  function Location(location) {
-    _classCallCheck(this, Location);
-
-    if (typeof location === 'string') {
-      this.location = location;
-    } else if ((typeof location === 'undefined' ? 'undefined' : _typeof(location)) === 'object') {
-      var locationValidator = new _validatorjs2.default(location, {
-        lat: "required|numeric",
-        lng: "required|numeric"
-      });
-      if (locationValidator.fails()) {
-        console.error(this.constructor.name + ' validation failed:', locationValidator.errors);
-      } else {
-        this.location = location;
-      }
-    } else {
-      console.error('Location must be in String of address, or object of {lat: numeric, lng:numeric}');
-    }
-  }
-
-  _createClass(Location, [{
-    key: 'toString',
-    value: function toString() {
-      if (typeof this.location === 'string') {
-        return this.location;
-      } else {
-        return this.location.lat.toFixed(6) + ',' + this.location.lng.toFixed(6);
-      }
-    }
-  }]);
-
-  return Location;
-}();
-
-exports.Location = Location;
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * Created by qiyuzhao on 2018-02-03.
- */
-
-var Utility = function () {
-  function Utility() {
-    _classCallCheck(this, Utility);
-  }
-
-  _createClass(Utility, [{
-    key: 'cleanObject',
-
-
-    // remove null objects
-    value: function cleanObject(target) {
-      var result = void 0;
-      if (Array.isArray(target)) {
-        result = [];
-      } else {
-        result = {};
-      }
-      for (var i in target) {
-        if (target[i] === null || typeof target[i] === 'undefined') {
-          continue;
-        }if (Array.isArray(target[i])) {
-          result[i] = this.cleanObject(target[i]);
-        } else {
-          result[i] = target[i];
-        }
-      }
-      return result;
-    }
-  }]);
-
-  return Utility;
-}();
-
-exports.Utility = Utility;
-
-/***/ }),
 /* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1834,13 +1839,13 @@ var _GMarker = __webpack_require__(23);
 
 var _GPath = __webpack_require__(30);
 
-var _Location = __webpack_require__(20);
+var _Location = __webpack_require__(2);
 
 var _validatorjs = __webpack_require__(0);
 
 var _validatorjs2 = _interopRequireDefault(_validatorjs);
 
-var _Utility = __webpack_require__(21);
+var _Utility = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2007,9 +2012,9 @@ var _validatorjs = __webpack_require__(0);
 
 var _validatorjs2 = _interopRequireDefault(_validatorjs);
 
-var _Location = __webpack_require__(20);
+var _Location = __webpack_require__(2);
 
-var _Utility = __webpack_require__(21);
+var _Utility = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2842,7 +2847,7 @@ module.exports = container;
 /* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Attributes = __webpack_require__(2);
+var Attributes = __webpack_require__(4);
 
 var Messages = function(lang, messages) {
   this.lang = lang;
@@ -3001,42 +3006,42 @@ module.exports = Messages;
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./de": 3,
-	"./de.js": 3,
-	"./el": 4,
-	"./el.js": 4,
+	"./de": 5,
+	"./de.js": 5,
+	"./el": 6,
+	"./el.js": 6,
 	"./en": 1,
 	"./en.js": 1,
-	"./es": 5,
-	"./es.js": 5,
-	"./fa": 6,
-	"./fa.js": 6,
-	"./fr": 7,
-	"./fr.js": 7,
-	"./it": 8,
-	"./it.js": 8,
-	"./ja": 9,
-	"./ja.js": 9,
-	"./nb_NO": 10,
-	"./nb_NO.js": 10,
-	"./nl": 11,
-	"./nl.js": 11,
-	"./pl": 12,
-	"./pl.js": 12,
-	"./pt": 13,
-	"./pt.js": 13,
-	"./ru": 14,
-	"./ru.js": 14,
-	"./tr": 15,
-	"./tr.js": 15,
-	"./ua": 16,
-	"./ua.js": 16,
-	"./vi": 17,
-	"./vi.js": 17,
-	"./zh": 18,
-	"./zh.js": 18,
-	"./zh_TW": 19,
-	"./zh_TW.js": 19
+	"./es": 7,
+	"./es.js": 7,
+	"./fa": 8,
+	"./fa.js": 8,
+	"./fr": 9,
+	"./fr.js": 9,
+	"./it": 10,
+	"./it.js": 10,
+	"./ja": 11,
+	"./ja.js": 11,
+	"./nb_NO": 12,
+	"./nb_NO.js": 12,
+	"./nl": 13,
+	"./nl.js": 13,
+	"./pl": 14,
+	"./pl.js": 14,
+	"./pt": 15,
+	"./pt.js": 15,
+	"./ru": 16,
+	"./ru.js": 16,
+	"./tr": 17,
+	"./tr.js": 17,
+	"./ua": 18,
+	"./ua.js": 18,
+	"./vi": 19,
+	"./vi.js": 19,
+	"./zh": 20,
+	"./zh.js": 20,
+	"./zh_TW": 21,
+	"./zh_TW.js": 21
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -3240,13 +3245,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Created by qiyuzhao on 2018-02-02.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _Utility = __webpack_require__(21);
+var _Utility = __webpack_require__(3);
 
-var _Location = __webpack_require__(20);
+var _Location = __webpack_require__(2);
 
 var _validatorjs = __webpack_require__(0);
 
 var _validatorjs2 = _interopRequireDefault(_validatorjs);
+
+var _polyline = __webpack_require__(31);
+
+var _polyline2 = _interopRequireDefault(_polyline);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3269,25 +3278,34 @@ var GPath = function () {
   _createClass(GPath, [{
     key: 'toString',
     value: function toString() {
+      var _this = this;
+
       var util = new _Utility.Utility();
       var options = util.cleanObject(this.options);
       var params = [];
 
       for (var i in options) {
-        switch (i) {
-          case 'locations':
-            params.push(options[i].join('|'));
-            break;
-          case 'geodesic':
-            if (this.options.geodesic === true) {
-              params.push(i + ':true');
-            } else if (this.options.geodesic === false) {
-              params.push(i + ':false');
-            }
-            break;
-          default:
-            params.push(i + ':' + options[i].toString());
-        }
+        (function () {
+          switch (i) {
+            case 'locations':
+              var locations = [];
+              options[i].forEach(function (l) {
+                locations.push(l.toArray());
+              });
+              console.log(locations);
+              params.push('enc:' + _polyline2.default.encode(locations));
+              break;
+            case 'geodesic':
+              if (_this.options.geodesic === true) {
+                params.push(i + ':true');
+              } else if (_this.options.geodesic === false) {
+                params.push(i + ':false');
+              }
+              break;
+            default:
+              params.push(i + ':' + options[i].toString());
+          }
+        })();
       }
       return 'path=' + params.join('|');
     }
@@ -3403,6 +3421,173 @@ var GCirclePath = function () {
 
 exports.GPath = GPath;
 exports.GCirclePath = GCirclePath;
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Based off of [the offical Google document](https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
+ *
+ * Some parts from [this implementation](http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/PolylineEncoder.js)
+ * by [Mark McClure](http://facstaff.unca.edu/mcmcclur/)
+ *
+ * @module polyline
+ */
+
+var polyline = {};
+
+function py2_round(value) {
+    // Google's polyline algorithm uses the same rounding strategy as Python 2, which is different from JS for negative values
+    return Math.floor(Math.abs(value) + 0.5) * Math.sign(value);
+}
+
+function encode(current, previous, factor) {
+    current = py2_round(current * factor);
+    previous = py2_round(previous * factor);
+    var coordinate = current - previous;
+    coordinate <<= 1;
+    if (current - previous < 0) {
+        coordinate = ~coordinate;
+    }
+    var output = '';
+    while (coordinate >= 0x20) {
+        output += String.fromCharCode((0x20 | (coordinate & 0x1f)) + 63);
+        coordinate >>= 5;
+    }
+    output += String.fromCharCode(coordinate + 63);
+    return output;
+}
+
+/**
+ * Decodes to a [latitude, longitude] coordinates array.
+ *
+ * This is adapted from the implementation in Project-OSRM.
+ *
+ * @param {String} str
+ * @param {Number} precision
+ * @returns {Array}
+ *
+ * @see https://github.com/Project-OSRM/osrm-frontend/blob/master/WebContent/routing/OSRM.RoutingGeometry.js
+ */
+polyline.decode = function(str, precision) {
+    var index = 0,
+        lat = 0,
+        lng = 0,
+        coordinates = [],
+        shift = 0,
+        result = 0,
+        byte = null,
+        latitude_change,
+        longitude_change,
+        factor = Math.pow(10, precision || 5);
+
+    // Coordinates have variable length when encoded, so just keep
+    // track of whether we've hit the end of the string. In each
+    // loop iteration, a single coordinate is decoded.
+    while (index < str.length) {
+
+        // Reset shift, result, and byte
+        byte = null;
+        shift = 0;
+        result = 0;
+
+        do {
+            byte = str.charCodeAt(index++) - 63;
+            result |= (byte & 0x1f) << shift;
+            shift += 5;
+        } while (byte >= 0x20);
+
+        latitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+
+        shift = result = 0;
+
+        do {
+            byte = str.charCodeAt(index++) - 63;
+            result |= (byte & 0x1f) << shift;
+            shift += 5;
+        } while (byte >= 0x20);
+
+        longitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+
+        lat += latitude_change;
+        lng += longitude_change;
+
+        coordinates.push([lat / factor, lng / factor]);
+    }
+
+    return coordinates;
+};
+
+/**
+ * Encodes the given [latitude, longitude] coordinates array.
+ *
+ * @param {Array.<Array.<Number>>} coordinates
+ * @param {Number} precision
+ * @returns {String}
+ */
+polyline.encode = function(coordinates, precision) {
+    if (!coordinates.length) { return ''; }
+
+    var factor = Math.pow(10, precision || 5),
+        output = encode(coordinates[0][0], 0, factor) + encode(coordinates[0][1], 0, factor);
+
+    for (var i = 1; i < coordinates.length; i++) {
+        var a = coordinates[i], b = coordinates[i - 1];
+        output += encode(a[0], b[0], factor);
+        output += encode(a[1], b[1], factor);
+    }
+
+    return output;
+};
+
+function flipped(coords) {
+    var flipped = [];
+    for (var i = 0; i < coords.length; i++) {
+        flipped.push(coords[i].slice().reverse());
+    }
+    return flipped;
+}
+
+/**
+ * Encodes a GeoJSON LineString feature/geometry.
+ *
+ * @param {Object} geojson
+ * @param {Number} precision
+ * @returns {String}
+ */
+polyline.fromGeoJSON = function(geojson, precision) {
+    if (geojson && geojson.type === 'Feature') {
+        geojson = geojson.geometry;
+    }
+    if (!geojson || geojson.type !== 'LineString') {
+        throw new Error('Input must be a GeoJSON LineString');
+    }
+    return polyline.encode(flipped(geojson.coordinates), precision);
+};
+
+/**
+ * Decodes to a GeoJSON LineString geometry.
+ *
+ * @param {String} str
+ * @param {Number} precision
+ * @returns {Object}
+ */
+polyline.toGeoJSON = function(str, precision) {
+    var coords = polyline.decode(str, precision);
+    return {
+        type: 'LineString',
+        coordinates: flipped(coords)
+    };
+};
+
+if (typeof module === 'object' && module.exports) {
+    module.exports = polyline;
+}
+
 
 /***/ })
 /******/ ]);

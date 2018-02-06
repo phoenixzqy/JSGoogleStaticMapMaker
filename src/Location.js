@@ -3,7 +3,6 @@
  */
 import Validator from  'validatorjs';
 
-
 class Location {
   constructor(location) {
     if (typeof location === 'string') {
@@ -27,8 +26,12 @@ class Location {
     if(typeof this.location === 'string') {
       return this.location;
     } else {
-      return `${this.location.lat.toFixed(6)},${this.location.lng.toFixed(6)}`;
+      return `${this.location.lat.toFixed(5)},${this.location.lng.toFixed(5)}`;
     }
+  }
+
+  toArray():Array {
+    return [this.location.lat, this.location.lng];
   }
 }
 

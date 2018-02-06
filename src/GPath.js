@@ -5,6 +5,7 @@
 import {Utility} from 'src/Utility/Utility';
 import {Location} from 'src/Location';
 import Validator from  'validatorjs';
+import Polyline from '@mapbox/polyline';
 
 
 class GPath {
@@ -27,7 +28,12 @@ class GPath {
     for (var i in options) {
       switch (i) {
         case 'locations':
-          params.push(options[i].join('|'));
+          let locations = [];
+          options[i].forEach((l) => {
+            locations.push(l.toArray());
+          });
+          console.log(locations);
+          params.push(`enc:${Polyline.encode(locations)}`);
           break;
         case 'geodesic':
           if (this.options.geodesic === true) {
