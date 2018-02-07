@@ -7,12 +7,23 @@
   <script src="../dist/JSGoogleStaticMapMaker.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-  <script>
-    var GKey = 'AIzaSyB6XeHnou8qMVZo2mK0u8UffupNVTP0GPc';
-    var maker = new GSMMaker.MapMaker({
-      center: new GSMMaker.Location('4611 viking way, richmond'),
-      size: {width: 800, height: 600},
-      zoom: 16,
+
+</head>
+<body style="width: 800px; margin: 0 auto;">
+<h1>result</h1>
+<button onclick="test();">test me</button>
+<textarea id="result" style="width: 100%; position: relative; height: 100px; margin: 20px 0;"></textarea>
+<img id="image-container" src="" alt="">
+<div id="map">
+  <img src="" alt="">
+</div>
+</body>
+<script>
+  var GKey = 'AIzaSyB6XeHnou8qMVZo2mK0u8UffupNVTP0GPc';
+  var maker = new GSMMaker.MapMaker({
+    center: new GSMMaker.Location('4611 viking way, richmond'),
+    size: {width: 800, height: 600},
+    zoom: 16,
       markers: [
         new GSMMaker.GMarker({
           icon: 'https://goo.gl/1oTJ9Y',
@@ -36,7 +47,7 @@
           ]
         })
       ],
-      paths: [
+    paths: [
         new GSMMaker.GPath({
           weight: 5,
           color: '0x00000000',
@@ -61,17 +72,17 @@
             }), // same as the first location, to draw a triangle
           ]
         }),
-        new GSMMaker.GCirclePath({
-          location: new GSMMaker.Location({
-            lat: 49.183927,
-            lng: -123.071773
-          }),
-          weight: 3,
-          color: 'black',
-          fillcolor: 'blue',
-          radius: 100, // meter
-          detail: 8 // how detail the circle will be draw
+      new GSMMaker.GCirclePath({
+        location: new GSMMaker.Location({
+          lat: 49.183927,
+          lng: -123.071773
         }),
+        weight: 3,
+        color: 'black',
+        fillcolor: 'blue',
+        radius: 100, // meter
+        detail: 8 // how detail the circle will be draw
+      }),
         new GSMMaker.GRectangePath({
           location: new GSMMaker.Location({
             lat: 49.180927,
@@ -83,21 +94,14 @@
           width: 200, // meter
           height: 100 // meter
         }),
-      ]
-    }, GKey);
+    ]
+  }, GKey);
 
-    function test() {
-      var url = maker.toString();
-      $("#result").val(decodeURI(url));
-      $("#image-container").attr('src', url);
-    }
-  </script>
 
-</head>
-<body style="width: 800px; margin: 0 auto;">
-<h1>result</h1>
-<button onclick="test();">test me</button>
-<textarea id="result" style="width: 100%; position: relative; height: 100px; margin: 20px 0;"></textarea>
-<img id="image-container" src="" alt="">
-</body>
+  function test() {
+    var url = maker.toString();
+    $("#result").val(decodeURI(url));
+  }
+</script>
+
 </html>
