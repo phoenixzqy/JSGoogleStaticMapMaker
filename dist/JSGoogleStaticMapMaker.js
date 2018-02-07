@@ -1966,8 +1966,8 @@ var MapMaker = function () {
     }
   }, {
     key: 'addGMarker',
-    value: function addGMarker(markerOptions) {
-      this.options.markers.push(new _GMarker.GMarker(markerOptions));
+    value: function addGMarker(marker) {
+      this.options.markers.push(marker);
     }
   }, {
     key: 'clearGMarker',
@@ -1976,8 +1976,8 @@ var MapMaker = function () {
     }
   }, {
     key: 'addGPath',
-    value: function addGPath(pathOptions) {
-      this.options.paths.push(new _GPath.GPath(pathOptions));
+    value: function addGPath(path) {
+      this.options.paths.push(path);
     }
   }, {
     key: 'clearGPath',
