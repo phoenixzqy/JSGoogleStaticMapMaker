@@ -111,16 +111,16 @@ class MapMaker {
     }
   }
 
-  addGMarker(markerOptions) {
-    this.options.markers.push(new GMarker(markerOptions));
+  addGMarker(marker) {
+    this.options.markers.push(marker);
   }
 
   clearGMarker() {
     this.options.markers = [];
   }
 
-  addGPath(pathOptions) {
-    this.options.paths.push(new GPath(pathOptions));
+  addGPath(path) {
+    this.options.paths.push(path);
   }
 
   clearGPath() {
