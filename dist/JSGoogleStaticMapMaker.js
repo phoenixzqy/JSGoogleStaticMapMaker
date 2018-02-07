@@ -3464,7 +3464,6 @@ var GRectangePath = function (_BasePath3) {
       var distance = Math.sqrt(Math.pow(this.options.width, 2) + Math.pow(this.options.height, 2)) / 2;
       var degree = Math.atan(this.options.width / this.options.height);
       var locations = [new _Location.Location(this._calculateLatLng(latlng, distance, degree)), new _Location.Location(this._calculateLatLng(latlng, distance, Math.PI - degree)), new _Location.Location(this._calculateLatLng(latlng, distance, degree + Math.PI)), new _Location.Location(this._calculateLatLng(latlng, distance, -degree)), new _Location.Location(this._calculateLatLng(latlng, distance, degree))];
-      console.log(locations);
       var myPath = new GPath({
         weight: this.options.weight,
         color: this.options.color,

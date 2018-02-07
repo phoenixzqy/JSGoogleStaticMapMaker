@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>JSGoogleStaticMapMaker</title>
-  <!--google chart.js-->
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script src="../dist/JSGoogleStaticMapMaker.js"></script>
+  <!--Google Static Map Maker.js-->
+  <script src="../dist/JSGoogleStaticMapMaker.min.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
   <script>
@@ -62,21 +61,21 @@
             }), // same as the first location, to draw a triangle
           ]
         }),
-//        new GSMMaker.GCirclePath({
-//          location: new GSMMaker.Location({
-//            lat: 49.183927,
-//            lng: -123.071773
-//          }),
-//          weight: 3,
-//          color: 'black',
-//          fillcolor: 'blue',
-//          radius: 100, // meter
-//          detail: 8 // how detail the circle will be draw
-//        }),
-        new GSMMaker.GRectangePath({
+        new GSMMaker.GCirclePath({
           location: new GSMMaker.Location({
             lat: 49.183927,
             lng: -123.071773
+          }),
+          weight: 3,
+          color: 'black',
+          fillcolor: 'blue',
+          radius: 100, // meter
+          detail: 8 // how detail the circle will be draw
+        }),
+        new GSMMaker.GRectangePath({
+          location: new GSMMaker.Location({
+            lat: 49.180927,
+            lng: -123.072773
           }),
           weight: 10,
           color: 'black',

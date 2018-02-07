@@ -188,7 +188,6 @@ class GRectangePath extends BasePath {
         degree
       ))
     ];
-    console.log(locations);
     let myPath = new GPath({
       weight: this.options.weight,
       color: this.options.color,
