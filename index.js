@@ -1,5 +1,5 @@
 import {GMarker} from 'src/GMarker';
-import {GPath, GCirclePath} from 'src/GPath';
+import {GPath, GCirclePath, GRectangePath} from 'src/GPath';
 import {Location} from 'src/Location';
 import Validator from  'validatorjs';
 import {Utility} from 'src/Utility/Utility';
@@ -129,4 +129,4 @@ class MapMaker {
 }
 
 
-export {MapMaker, GMarker, Location, GPath, GCirclePath};
+export {MapMaker, GMarker, Location, GPath, GCirclePath, GRectangePath};

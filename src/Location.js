@@ -23,7 +23,7 @@ class Location {
   }
 
   toString():String {
-    if(typeof this.location === 'string') {
+    if (typeof this.location === 'string') {
       return this.location;
     } else {
       return `${this.location.lat.toFixed(5)},${this.location.lng.toFixed(5)}`;
@@ -31,7 +31,11 @@ class Location {
   }
 
   toArray():Array {
-    return [this.location.lat, this.location.lng];
+    if (typeof this.location === 'string') {
+      return [0, 0];
+    } else {
+      return [this.location.lat, this.location.lng];
+    }
   }
 }
 

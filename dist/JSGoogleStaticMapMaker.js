@@ -833,7 +833,11 @@ var Location = function () {
   }, {
     key: 'toArray',
     value: function toArray() {
-      return [this.location.lat, this.location.lng];
+      if (typeof this.location === 'string') {
+        return [0, 0];
+      } else {
+        return [this.location.lat, this.location.lng];
+      }
     }
   }]);
 
@@ -1831,7 +1835,7 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GCirclePath = exports.GPath = exports.Location = exports.GMarker = exports.MapMaker = undefined;
+exports.GRectangePath = exports.GCirclePath = exports.GPath = exports.Location = exports.GMarker = exports.MapMaker = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1990,6 +1994,7 @@ exports.GMarker = _GMarker.GMarker;
 exports.Location = _Location.Location;
 exports.GPath = _GPath.GPath;
 exports.GCirclePath = _GPath.GCirclePath;
+exports.GRectangePath = _GPath.GRectangePath;
 
 /***/ }),
 /* 23 */
@@ -3239,7 +3244,7 @@ module.exports = AsyncResolvers;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GCirclePath = exports.GPath = undefined;
+exports.GRectangePath = exports.GCirclePath = exports.GPath = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * Created by qiyuzhao on 2018-02-02.
@@ -3259,26 +3264,83 @@ var _polyline2 = _interopRequireDefault(_polyline);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var GPath = function () {
-  function GPath(options) {
-    _classCallCheck(this, GPath);
+var BasePath = function () {
+  function BasePath(options) {
+    _classCallCheck(this, BasePath);
 
     this.options = {
       weight: null,
       color: null,
       fillcolor: null,
-      geodesic: null,
-      locations: []
+      geodesic: null
     };
-    this.setOptions(options);
+    this.rules = {
+      weight: 'integer',
+      color: 'string',
+      fillcolor: 'string',
+      geodesic: 'boolean'
+    };
+  }
+
+  _createClass(BasePath, [{
+    key: 'getOptions',
+    value: function getOptions() {
+      return this.options;
+    }
+  }, {
+    key: 'setOptions',
+    value: function setOptions(options) {
+      this.options = Object.assign(this.options, options);
+
+      //specifies a color either as a 24-bit (example: color=0xFFFFCC) or 32-bit hexadecimal value (example: color=0xFFFFCCFF),
+      // or from the set {black, brown, green, purple, yellow, blue, gray, orange, red, white}.
+      var validatePath = new _validatorjs2.default(this.options, this.rules);
+
+      if (validatePath.fails()) {
+        console.error(this.constructor.name + ' validation failed:', validatePath.errors);
+      }
+    }
+  }, {
+    key: '_calculateLatLng',
+    value: function _calculateLatLng(originLatLng, distance, angle) {
+      var lat = originLatLng.lat * Math.PI / 180;
+      var lng = originLatLng.lng * Math.PI / 180;
+      var d = distance / 1000 / 6371;
+
+      var tempLat = Math.asin(Math.sin(lat) * Math.cos(d) + Math.cos(lat) * Math.sin(d) * Math.cos(angle));
+      var tempLng = (lng + Math.atan2(Math.sin(angle) * Math.sin(d) * Math.cos(lat), Math.cos(d) - Math.sin(lat) * Math.sin(tempLat))) * 180 / Math.PI;
+      tempLat = tempLat * 180 / Math.PI;
+      return { lat: tempLat, lng: tempLng };
+    }
+  }]);
+
+  return BasePath;
+}();
+
+var GPath = function (_BasePath) {
+  _inherits(GPath, _BasePath);
+
+  function GPath(options) {
+    _classCallCheck(this, GPath);
+
+    var _this = _possibleConstructorReturn(this, (GPath.__proto__ || Object.getPrototypeOf(GPath)).call(this, options));
+
+    _this.options = Object.assign(_this.options, { locations: [] });
+    _this.rules = Object.assign(_this.rules, { locations: 'required|array' });
+    _this.setOptions(options);
+    return _this;
   }
 
   _createClass(GPath, [{
     key: 'toString',
     value: function toString() {
-      var _this = this;
+      var _this2 = this;
 
       var util = new _Utility.Utility();
       var options = util.cleanObject(this.options);
@@ -3292,13 +3354,13 @@ var GPath = function () {
               options[i].forEach(function (l) {
                 locations.push(l.toArray());
               });
-              console.log(locations);
               params.push('enc:' + _polyline2.default.encode(locations));
+              //params.push(options[i].join('|')); // with numeric geo location.
               break;
             case 'geodesic':
-              if (_this.options.geodesic === true) {
+              if (_this2.options.geodesic === true) {
                 params.push(i + ':true');
-              } else if (_this.options.geodesic === false) {
+              } else if (_this2.options.geodesic === false) {
                 params.push(i + ':false');
               }
               break;
@@ -3308,30 +3370,6 @@ var GPath = function () {
         })();
       }
       return 'path=' + params.join('|');
-    }
-  }, {
-    key: 'getOptions',
-    value: function getOptions() {
-      return this.options;
-    }
-  }, {
-    key: 'setOptions',
-    value: function setOptions(options) {
-      this.options = Object.assign(this.options, options);
-
-      //specifies a color either as a 24-bit (example: color=0xFFFFCC) or 32-bit hexadecimal value (example: color=0xFFFFCCFF),
-      // or from the set {black, brown, green, purple, yellow, blue, gray, orange, red, white}.
-      var validatePath = new _validatorjs2.default(this.options, {
-        weight: 'integer',
-        color: 'string',
-        fillcolor: 'string',
-        geodesic: 'boolean',
-        locations: 'required|array'
-      });
-
-      if (validatePath.fails()) {
-        console.error(this.constructor.name + ' validation failed:', validatePath.errors);
-      }
     }
   }, {
     key: 'addLocations',
@@ -3346,38 +3384,38 @@ var GPath = function () {
   }]);
 
   return GPath;
-}();
+}(BasePath);
 
-var GCirclePath = function () {
+var GCirclePath = function (_BasePath2) {
+  _inherits(GCirclePath, _BasePath2);
+
   function GCirclePath(options) {
     _classCallCheck(this, GCirclePath);
 
-    this.options = {
+    var _this3 = _possibleConstructorReturn(this, (GCirclePath.__proto__ || Object.getPrototypeOf(GCirclePath)).call(this, options));
+
+    _this3.options = Object.assign(_this3.options, {
       location: null,
-      weight: null,
-      color: null,
-      fillcolor: null,
-      geodesic: null,
       radius: null,
       detail: 8
-    };
-    this.setOptions(options);
+    });
+    _this3.rules = Object.assign(_this3.rules, {
+      location: 'required',
+      radius: 'numeric|required', // unit of meters
+      detail: 'integer|min:8|max:20'
+    });
+    _this3.setOptions(options);
+    return _this3;
   }
 
   _createClass(GCirclePath, [{
     key: 'toString',
     value: function toString() {
       var locations = [];
-      var lat = this.options.location.location.lat * Math.PI / 180;
-      var lng = this.options.location.location.lng * Math.PI / 180;
-      var dimension = this.options.radius / 1000 / 6371;
 
       for (var i = 0; i <= 365; i += this.options.detail) {
-        var angle = i * Math.PI / 180;
-        var tempLat = Math.asin(Math.sin(lat) * Math.cos(dimension) + Math.cos(lat) * Math.sin(dimension) * Math.cos(angle));
-        var tempLng = (lng + Math.atan2(Math.sin(angle) * Math.sin(dimension) * Math.cos(lat), Math.cos(dimension) - Math.sin(lat) * Math.sin(tempLat))) * 180 / Math.PI;
-        tempLat = tempLat * 180 / Math.PI;
-        locations.push(new _Location.Location({ lat: tempLat, lng: tempLng }));
+        var tempLatLng = this._calculateLatLng(this.options.location.location, this.options.radius, i * Math.PI / 180);
+        locations.push(new _Location.Location({ lat: tempLatLng.lat, lng: tempLatLng.lng }));
       }
       var myPath = new GPath({
         weight: this.options.weight,
@@ -3388,39 +3426,62 @@ var GCirclePath = function () {
       });
       return myPath.toString();
     }
-  }, {
-    key: 'getOptions',
-    value: function getOptions() {
-      return this.options;
-    }
-  }, {
-    key: 'setOptions',
-    value: function setOptions(options) {
-      this.options = Object.assign(this.options, options);
-
-      //specifies a color either as a 24-bit (example: color=0xFFFFCC) or 32-bit hexadecimal value (example: color=0xFFFFCCFF),
-      // or from the set {black, brown, green, purple, yellow, blue, gray, orange, red, white}.
-      var validatePath = new _validatorjs2.default(this.options, {
-        location: 'required', // suppose to be a Location object
-        weight: 'integer',
-        color: 'string',
-        fillcolor: 'string',
-        geodesic: 'boolean',
-        radius: 'numeric|required', // unit of meters
-        detail: 'integer|min:8|max:20'
-      });
-
-      if (validatePath.fails()) {
-        console.error(this.constructor.name + ' validation failed:', validatePath.errors);
-      }
-    }
   }]);
 
   return GCirclePath;
-}();
+}(BasePath);
+
+var GRectangePath = function (_BasePath3) {
+  _inherits(GRectangePath, _BasePath3);
+
+  function GRectangePath(options) {
+    _classCallCheck(this, GRectangePath);
+
+    var _this4 = _possibleConstructorReturn(this, (GRectangePath.__proto__ || Object.getPrototypeOf(GRectangePath)).call(this, options));
+
+    _this4.options = Object.assign(_this4.options, {
+      location: null,
+      width: null,
+      height: null
+    });
+    _this4.rules = Object.assign(_this4.rules, {
+      location: 'required',
+      width: 'numeric|required', // unit of meters
+      height: 'numeric|required' // unit of meters
+    });
+    _this4.setOptions(options);
+    return _this4;
+  }
+
+  _createClass(GRectangePath, [{
+    key: 'toString',
+    value: function toString() {
+      var latlng = this.options.location.toArray();
+      latlng = {
+        lat: latlng[0],
+        lng: latlng[1]
+      };
+      var distance = Math.sqrt(Math.pow(this.options.width, 2) + Math.pow(this.options.height, 2)) / 2;
+      var degree = Math.atan(this.options.width / this.options.height);
+      var locations = [new _Location.Location(this._calculateLatLng(latlng, distance, degree)), new _Location.Location(this._calculateLatLng(latlng, distance, Math.PI - degree)), new _Location.Location(this._calculateLatLng(latlng, distance, degree + Math.PI)), new _Location.Location(this._calculateLatLng(latlng, distance, -degree)), new _Location.Location(this._calculateLatLng(latlng, distance, degree))];
+      console.log(locations);
+      var myPath = new GPath({
+        weight: this.options.weight,
+        color: this.options.color,
+        fillcolor: this.options.fillcolor,
+        geodesic: this.options.geodesic,
+        locations: locations
+      });
+      return myPath.toString();
+    }
+  }]);
+
+  return GRectangePath;
+}(BasePath);
 
 exports.GPath = GPath;
 exports.GCirclePath = GCirclePath;
+exports.GRectangePath = GRectangePath;
 
 /***/ }),
 /* 31 */

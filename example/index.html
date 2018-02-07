@@ -62,17 +62,28 @@
             }), // same as the first location, to draw a triangle
           ]
         }),
-        new GSMMaker.GCirclePath({
+//        new GSMMaker.GCirclePath({
+//          location: new GSMMaker.Location({
+//            lat: 49.183927,
+//            lng: -123.071773
+//          }),
+//          weight: 3,
+//          color: 'black',
+//          fillcolor: 'blue',
+//          radius: 100, // meter
+//          detail: 8 // how detail the circle will be draw
+//        }),
+        new GSMMaker.GRectangePath({
           location: new GSMMaker.Location({
             lat: 49.183927,
             lng: -123.071773
           }),
-          weight: 3,
+          weight: 10,
           color: 'black',
-          fillcolor: 'blue',
-          radius: 100, // meter
-          detail: 8 // how detail the circle will be draw
-        })
+          fillcolor: 'red',
+          width: 200, // meter
+          height: 100 // meter
+        }),
       ]
     }, GKey);
 
