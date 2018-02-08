@@ -174,3 +174,93 @@ This is a special `GPath`, witch draw a *rectangle* based on the center `locatio
 | toString() | | String | Generate marker string only |
 | getOptions() | | Object | Get current options |
 | setOptions() | Object | | Set current options |
+
+
+## Example
+
+```javascript
+  var maker = new GSMMaker.MapMaker({
+    center: new GSMMaker.Location('4611 viking way, richmond'),
+    size: {width: 800, height: 600},
+    zoom: 16,
+      markers: [
+        new GSMMaker.GMarker({
+          icon: 'https://goo.gl/1oTJ9Y',
+          anchor: 'center',
+          locations: [
+            new GSMMaker.Location({
+              lat: 49.182760,
+              lng: -123.076259
+            })
+          ]
+        }),
+        new GSMMaker.GMarker({
+          color: 'red',
+          label: 'H',
+          size: 'normal',
+          locations: [
+            new GSMMaker.Location({
+              lat: 49.183227,
+              lng: -123.076773
+            })
+          ]
+        })
+      ],
+    paths: [
+        new GSMMaker.GPath({
+          weight: 5,
+          color: '0x00000000',
+          fillcolor: 'red',
+          geodesic: true,
+          locations: [
+            new GSMMaker.Location({
+              lat: 49.183760,
+              lng: -123.075259
+            }),
+            new GSMMaker.Location({
+              lat: 49.183227,
+              lng: -123.073773
+            }),
+            new GSMMaker.Location({
+              lat: 49.183227,
+              lng: -123.074773
+            }),
+            new GSMMaker.Location({
+              lat: 49.183760,
+              lng: -123.075259
+            }), // same as the first location, to draw a triangle
+          ]
+        }),
+      new GSMMaker.GCirclePath({
+        location: new GSMMaker.Location({
+          lat: 49.183927,
+          lng: -123.071773
+        }),
+        weight: 3,
+        color: 'black',
+        fillcolor: 'blue',
+        radius: 100, // meter
+        detail: 8 // how detail the circle will be draw
+      }),
+        new GSMMaker.GRectangePath({
+          location: new GSMMaker.Location({
+            lat: 49.180927,
+            lng: -123.072773
+          }),
+          weight: 10,
+          color: 'black',
+          fillcolor: 'red',
+          width: 200, // meter
+          height: 100 // meter
+        }),
+    ]
+  }, 'Your google app key');
+  
+  var url = maker.toString();
+```
+
+`url` will be a string of static map image url: `https://maps.googleapis.com/maps/api/staticmap?center=4611%20viking%20way,%20richmond&zoom=16&size=800x600&path=weight:5%7Ccolor:0x00000000%7Cfillcolor:red%7Cgeodesic:true%7Cenc:oeekHjcenVhBiH?fEiB%60B&path=weight:3%7Ccolor:black%7Cfillcolor:blue%7Cenc:elekHpmdnV@e@De@Fc@Ja@L%5DP%5BRWTQVOVGVCX?VFVJTNTTPXNZL%60@H%60@Dd@Bd@?d@Cd@Eb@Ib@M%5EO%5CQXURUPWJWDY@WCWIWMUSSUQ%5BM_@Ka@Gc@Ee@Ae@&path=weight:10%7Ccolor:black%7Cfillcolor:red%7Cenc:svdkHfkdnVrD??dPsD??eP&markers=icon:https://goo.gl/1oTJ9Y%7Canchor:center%7C49.18276,-123.07626&markers=color:red%7Clabel:H%7Csize:normal%7C49.18323,-123.07677&key=your google app key`
+
+And it gives you this image:
+
+![map](https://maps.googleapis.com/maps/api/staticmap?center=4611%20viking%20way,%20richmond&zoom=16&size=800x600&path=weight:5%7Ccolor:0x00000000%7Cfillcolor:red%7Cgeodesic:true%7Cenc:oeekHjcenVhBiH?fEiB%60B&path=weight:3%7Ccolor:black%7Cfillcolor:blue%7Cenc:elekHpmdnV@e@De@Fc@Ja@L%5DP%5BRWTQVOVGVCX?VFVJTNTTPXNZL%60@H%60@Dd@Bd@?d@Cd@Eb@Ib@M%5EO%5CQXURUPWJWDY@WCWIWMUSSUQ%5BM_@Ka@Gc@Ee@Ae@&path=weight:10%7Ccolor:black%7Cfillcolor:red%7Cenc:svdkHfkdnVrD??dPsD??eP&markers=icon:https://goo.gl/1oTJ9Y%7Canchor:center%7C49.18276,-123.07626&markers=color:red%7Clabel:H%7Csize:normal%7C49.18323,-123.07677&key=AIzaSyB6XeHnou8qMVZo2mK0u8UffupNVTP0GPc)
