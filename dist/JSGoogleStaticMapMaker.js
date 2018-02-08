@@ -1948,11 +1948,11 @@ var MapMaker = function () {
           width: 'required|integer',
           height: 'required|integer'
         },
-        scale: 'integer|in:1,2',
+        scale: 'integer|in:1,2,4',
         format: 'string|in:png8,png,png32,gif,jpg,jpg-baseline',
         maptype: 'string|in:roadmap,satellite,hybrid,terrain',
         language: 'string', // google locale codes: https://developers.google.com/maps/faq#languagesupport
-        region: 'type:string', // Unicode region subtag identifiers: //
+        region: 'string', // Unicode region subtag identifiers: //
         // http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers
         paths: 'array',
         visible: 'array',
@@ -2043,9 +2043,9 @@ var GMarker = function () {
   _createClass(GMarker, [{
     key: 'toString',
     value: function toString() {
-      //The set of markerStyles is declared at the beginning of the markers declaration and consists of zero or more style
-      // descriptors separated by the pipe character (|), followed by a set of one or more locations also separated by the
-      // pipe character (|).
+      // The set of markerStyles is declared at the beginning of the markers declaration and consists of zero or more
+      // style descriptors separated by the pipe character (|), followed by a set of one or more locations also
+      // separated by the pipe character (|).
 
       var util = new _Utility.Utility();
       var options = util.cleanObject(this.options);
@@ -2086,6 +2086,16 @@ var GMarker = function () {
       if (validateMarker.fails()) {
         console.error(this.constructor.name + ' validation failed:', validateMarker.errors);
       }
+    }
+  }, {
+    key: 'addLocations',
+    value: function addLocations(location) {
+      this.options.locations.push(location);
+    }
+  }, {
+    key: 'clearLocations',
+    value: function clearLocations() {
+      this.options.locations = [];
     }
   }]);
 

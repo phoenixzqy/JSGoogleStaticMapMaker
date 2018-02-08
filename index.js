@@ -94,11 +94,11 @@ class MapMaker {
         width: 'required|integer',
         height: 'required|integer'
       },
-      scale: 'integer|in:1,2',
+      scale: 'integer|in:1,2,4',
       format: 'string|in:png8,png,png32,gif,jpg,jpg-baseline',
       maptype: 'string|in:roadmap,satellite,hybrid,terrain',
       language: 'string', // google locale codes: https://developers.google.com/maps/faq#languagesupport
-      region: 'type:string', // Unicode region subtag identifiers: //
+      region: 'string', // Unicode region subtag identifiers: //
       // http://www.unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers
       paths: 'array',
       visible: 'array',

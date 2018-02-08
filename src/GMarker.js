@@ -20,9 +20,9 @@ class GMarker {
 
 
   toString():String {
-    //The set of markerStyles is declared at the beginning of the markers declaration and consists of zero or more style
-    // descriptors separated by the pipe character (|), followed by a set of one or more locations also separated by the
-    // pipe character (|).
+    // The set of markerStyles is declared at the beginning of the markers declaration and consists of zero or more
+    // style descriptors separated by the pipe character (|), followed by a set of one or more locations also
+    // separated by the pipe character (|).
 
     let util = new Utility();
     let options = util.cleanObject(this.options);
@@ -61,6 +61,14 @@ class GMarker {
     if (validateMarker.fails()) {
       console.error(`${this.constructor.name} validation failed:`, validateMarker.errors);
     }
+  }
+
+  addLocations(location:object) {
+    this.options.locations.push(location);
+  }
+
+  clearLocations() {
+    this.options.locations = [];
   }
 }
 
