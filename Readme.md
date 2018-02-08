@@ -1,12 +1,15 @@
-# Pure JS Google Static Map Maker
+# :tada: :confetti_ball: Pure JS Google Static Map Maker :tada: :confetti_ball: 
 A js version for developer to easily build Google Static Map url.
 
 # install
 just include the `dist/JSGoogleStaticMapMaker.min.js` file into your project. 
+
 This lib can be directly used in both any webpage as a lib and any js project like `nodejs`.
 
 # developing
+
 `./webpackWatch.sh -dev` to compile a readable `JSGoogleStaticMapMaker.js` file.
+
 `./webpackWatch.sh` to compile a minified `JSGoogleStaticMapMaker.min.js` file.
 
 # Usage Example
@@ -23,7 +26,9 @@ var mapMaker = new GSMMaker.MapMaker(options, key, signature);
 ```
 
 `options` are basic [google static map options](https://developers.google.com/maps/documentation/static-maps/intro) valid options.
+
 `key` is your google app key.
+
 `signature` is your google app signature. (optional)
 
 *options table*
@@ -57,7 +62,9 @@ var mapMaker = new GSMMaker.MapMaker(options, key, signature);
 
 #### Location
 Usage: `new GSMMaker.Location(location)`
+
 The param `location` can either be a string of geo address like `Vancouver BC` or an object of geo locations like `{lat: 40.718217, lng: -73.998284}`
+
 eg:
 ```
 var myLocationA = new GSMMaker.Location('Vancouver BC');
@@ -69,6 +76,7 @@ var myLocationB = new GSMMaker.Location({lat: 40.718217, lng: -73.998284});
 
 #### GMarker
 Usage: `new GSMMaker.GMarker(options)`
+
 The `GMarker` parameter defines a set of one or more `GMarker` (map pins) at a set of locations. Each marker defined within a single `GMarker` declaration must exhibit the same visual style; if you wish to display `GMarker` with different styles, you will need to supply multiple `GMarker` object within `locations` array.
 
 *options table*
@@ -94,6 +102,7 @@ The `GMarker` parameter defines a set of one or more `GMarker` (map pins) at a s
 
 #### GPath
 Usage: `new GSMMaker.GPath(options)`
+
 The `GPath` parameter defines a set of one or more locations connected by a path to overlay on the map image. You can offer multiple `GPath` withing `locations` array in order to draw multiple `GPath`.
 
 *options table*
@@ -118,6 +127,7 @@ The `GPath` parameter defines a set of one or more locations connected by a path
 
 #### GCirclePath
 Usage: `new GSMMaker.GCirclePath(options)`
+
 This is a special `GPath`, witch draw a *circle* based on the center `location` (*NOT locations*) and `radius` (in meter) you offer.
 
 *options table*
@@ -142,6 +152,7 @@ This is a special `GPath`, witch draw a *circle* based on the center `location` 
 
 #### GRectangePath
 Usage: `new GSMMaker.GRectangePath(options)`
+
 This is a special `GPath`, witch draw a *rectangle* based on the center `location` (*NOT locations*) and `width`&`height` pair (in meter) you offer.
 
 *options table*
