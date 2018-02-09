@@ -5,8 +5,11 @@ import Validator from  'validatorjs';
 import {Utility} from 'src/Utility/Utility';
 
 class MapMaker {
-  constructor(options:object, key:string, signature:string) {
+  constructor(options:object, key:string, signature:string, url:string) {
     this.GSMapUrl = 'https://maps.googleapis.com/maps/api/staticmap?';
+    if(url && typeof url === 'string') {
+      this.GSMapUrl = url.slice(-1) === "?" ? url : `${url}?`;
+    }
     this.options = {
       center: null,
       zoom: null,

@@ -22,7 +22,7 @@ Note: all functions are all wrapped under `GSMMaker` object.
 #### MapMaker
 
 ```
-var mapMaker = new GSMMaker.MapMaker(options, key, signature);
+var mapMaker = new GSMMaker.MapMaker(options, key, signature, url);
 ```
 
 `options` are basic [google static map options](https://developers.google.com/maps/documentation/static-maps/intro) valid options.
@@ -30,6 +30,8 @@ var mapMaker = new GSMMaker.MapMaker(options, key, signature);
 `key` is your google app key.
 
 `signature` is your google app signature. (optional)
+
+`url` is the google static map service url. (optionsal) (eg: `https://maps.googleapis.com/maps/api/staticmap`)
 
 *options table*
       
