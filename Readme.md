@@ -31,7 +31,7 @@ var mapMaker = new GSMMaker.MapMaker(options, key, signature, url);
 
 `signature` is your google app signature. (optional)
 
-`url` is the google static map service url. (optionsal) (eg: `https://maps.googleapis.com/maps/api/staticmap`)
+`url` is the google static map service url. (optional) (eg: `https://maps.googleapis.com/maps/api/staticmap`)
 
 *options table*
       
