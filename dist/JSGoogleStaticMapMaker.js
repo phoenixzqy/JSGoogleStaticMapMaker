@@ -1929,7 +1929,7 @@ var MapMaker = function () {
       }
       // auth
       for (var i in auth) {
-        params.push(i + '=' + auth[i]);
+        if (auth[i] && auth[i].length > 0) params.push(i + '=' + auth[i]);
       }
       return encodeURI('' + this.GSMapUrl + params.join('&'));
     }
